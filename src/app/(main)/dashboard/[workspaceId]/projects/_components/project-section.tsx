@@ -17,15 +17,52 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { H3, H4, P } from "@/components/ui/typography";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
-import { GitBranch, MoreHorizontal, ToggleRight } from "lucide-react";
+import { GitBranch, Loader2, MoreHorizontal, ToggleRight } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function ProjectSection() {
   const { workspaceId } = useWorkspace();
 
-  const { data: projects, isLoading } = trpc.project.getProjects.useQuery({
+  const {
+    data: projects,
+    isLoading,
+    refetch,
+  } = trpc.project.getProjects.useQuery({
     workspaceId,
   });
+
+  const { mutateAsync: deleteProject, isLoading: deleteLoading } =
+    trpc.project.deleteProject.useMutation({
+      onSuccess: (data) => {
+        if (data) {
+          toast.success("Project Deleted", {
+            description: "Your project has been deleted",
+            duration: 3000,
+            position: "bottom-left",
+            style: {
+              backgroundColor: "rgba(0, 255, 0, 0.2)",
+              borderColor: "rgba(0, 255, 0, 0.4)",
+              color: "white",
+            },
+            className: "border",
+          });
+        }
+      },
+      onError: (error) => {
+        toast.error(error.message, {
+          description: "Please try again",
+          duration: 3000,
+          position: "bottom-left",
+          style: {
+            backgroundColor: "rgba(255, 0, 0, 0.2)",
+            borderColor: "rgba(255, 0, 0, 0.4)",
+            color: "white",
+          },
+          className: "border-[1px]",
+        });
+      },
+    });
 
   if (isLoading) {
     return (
@@ -68,6 +105,12 @@ export default function ProjectSection() {
     );
   }
 
+  const handleDeleteProject = async (projectId: string) => {
+    await deleteProject({ workspaceId, projectId }).then(() => {
+      refetch();
+    });
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
@@ -100,7 +143,11 @@ export default function ProjectSection() {
                 <Button
                   variant="ghost"
                   className="w-full text-left text-sm text-destructive hover:bg-destructive/25 hover:text-destructive"
+                  onClick={() => handleDeleteProject(project.id)}
                 >
+                  {deleteLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}{" "}
                   Delete Project
                 </Button>
               </DropdownMenuContent>

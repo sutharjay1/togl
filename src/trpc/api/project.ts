@@ -1,6 +1,6 @@
-import { z } from "zod";
 import { db } from "@/db";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
 
 const createProjectSchema = z.object({
@@ -53,6 +53,22 @@ export const projectRouter = router({
           });
         }
         await verifyUserWorkspaceAccess(userId!, workspaceId);
+
+        const projectExists = await db.project.findUnique({
+          where: {
+            workspaceId_name: {
+              name,
+              workspaceId,
+            },
+          },
+        });
+
+        if (projectExists) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Project already exists in this workspace",
+          });
+        }
 
         const project = await db.project.create({
           data: {

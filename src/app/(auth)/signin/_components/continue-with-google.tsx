@@ -38,23 +38,25 @@ const ContinueWithGoogle = () => {
         toast.error("Google login failed", {
           description: "Please try again",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       } else {
         toast.error("Unexpected Error", {
           description: "Something went wrong. Please try again.",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       }
     } finally {

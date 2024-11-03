@@ -38,6 +38,7 @@ const CreateProjectForm = () => {
           toast.success("Project Created", {
             description: "Your project has been created",
             duration: 3000,
+            position: "bottom-left",
             style: {
               backgroundColor: "rgba(0, 255, 0, 0.2)",
               borderColor: "rgba(0, 255, 0, 0.4)",
@@ -54,6 +55,7 @@ const CreateProjectForm = () => {
   const handleCreateProject = async (name: string) => {
     const loadId = toast.loading("Creating project...", {
       duration: 3000,
+      position: "bottom-left",
     });
 
     try {
@@ -61,25 +63,30 @@ const CreateProjectForm = () => {
     } catch (error) {
       if (error instanceof TRPCClientError) {
         toast.error(error.message, {
-          description: "Please try again",
+          description:
+            error.message === "Project already exists in this workspace"
+              ? "Change the project name and try again."
+              : "Please try again",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       } else {
         toast.error("Unexpected Error", {
           description: "Something went wrong. Please try again.",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       }
     } finally {
@@ -135,7 +142,7 @@ const CreateProjectForm = () => {
             {pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving
+                Creating...
               </>
             ) : (
               "Create Project"
@@ -143,7 +150,7 @@ const CreateProjectForm = () => {
           </Button>
           <Button
             type="button"
-            className="order-1 h-11 w-full sm:order-2 md:w-min md:self-center"
+            className="order-1 w-full sm:order-2 md:w-min md:self-center"
             variant="outline"
           >
             Cancel

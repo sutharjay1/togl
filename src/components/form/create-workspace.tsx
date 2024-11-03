@@ -50,6 +50,7 @@ const CreateWorkspaceForm = () => {
   const handleCreateWorkspace = async (name: string) => {
     const loadId = toast.loading("Creating workspace...", {
       duration: 3000,
+      position: "bottom-left",
     });
 
     try {
@@ -59,23 +60,25 @@ const CreateWorkspaceForm = () => {
         toast.error(error.message, {
           description: "Please try again",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       } else {
         toast.error("Unexpected Error", {
           description: "Something went wrong. Please try again.",
           duration: 3000,
+          position: "bottom-left",
           style: {
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderColor: "rgba(255, 0, 0, 0.4)",
             color: "white",
           },
-          className: "border",
+          className: "border-[1px]",
         });
       }
     } finally {
@@ -129,7 +132,7 @@ const CreateWorkspaceForm = () => {
             {pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving
+                Creating...
               </>
             ) : (
               "Create Workspace"
@@ -137,7 +140,7 @@ const CreateWorkspaceForm = () => {
           </Button>
           <Button
             type="button"
-            className="order-1 h-11 w-full sm:order-2 md:w-min md:self-center"
+            className="order-1 w-full sm:order-2 md:w-min md:self-center"
             variant="outline"
           >
             Cancel
