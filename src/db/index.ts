@@ -1,9 +1,15 @@
-"use server";
-import { neon } from "@neondatabase/serverless";
+import { PrismaClient } from "@prisma/client";
 
-export async function db({ query }: { query: string }) {
-  const sql = neon(process.env.DATABASE_URL!);
-
-  const data = await sql`${query}`;
-  return data;
+declare global {
+  var prisma: PrismaClient | undefined;
 }
+
+export const db = globalThis.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
+
+// import { PrismaClient } from "@prisma/client";
+
+// const db = new PrismaClient();
+
+// export { db };
