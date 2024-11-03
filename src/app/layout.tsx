@@ -15,12 +15,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Togl - Enterprise-Grade Feature Management System",
   description:
-    "Togl is a high-performance feature management system built with Bun, designed for modern development teams. Enable seamless feature deployment and A/B testing at scale.",
+    "Togl is a high-performance feature management system built with NextJS, designed for modern development teams. Enable seamless feature deployment and A/B testing at scale.",
   keywords: [
     "feature management",
     "feature flags",
     "A/B testing",
-    "Bun",
+    "NextJS",
     "enterprise",
     "development",
   ],

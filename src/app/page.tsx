@@ -16,7 +16,7 @@ export default function Home() {
           geistSans.className,
         )}
       >
-        <div className="relative isolate flex flex-col items-center justify-start px-6 pt-14 lg:px-8">
+        <div className="relative isolate flex flex-col items-center justify-center px-6 pt-24 md:justify-start md:pt-14 lg:px-8">
           <div
             aria-hidden="true"
             className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
