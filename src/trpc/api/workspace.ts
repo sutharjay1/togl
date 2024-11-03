@@ -87,7 +87,7 @@ export const workspaceRouter = router({
       }
     }),
 
-  getAll: privateProcedure.query(async ({ input, ctx }) => {
+  getAll: privateProcedure.query(async ({ ctx }) => {
     const { session } = ctx;
 
     try {
@@ -279,10 +279,17 @@ export const workspaceRouter = router({
 
         return { success: true };
       } catch (error) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to remove user from workspace",
-        });
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "An error occurred while removing user from workspace.",
+          });
+        }
       }
     }),
 

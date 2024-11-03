@@ -31,12 +31,7 @@ export default function UserWorkspace({
   const { workspaceId } = useWorkspace();
 
   const { data: workspaces, isLoading: loadingWorkspaces } =
-    trpc.workspace.getAll.useQuery(
-      { userId: user?.id },
-      {
-        enabled: !!user,
-      },
-    );
+    trpc.workspace.getAll.useQuery();
 
   const { data: currentWorkspace, isLoading: loadingCurrentWorkspace } =
     trpc.workspace.getById.useQuery(

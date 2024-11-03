@@ -52,10 +52,7 @@ export const projectRouter = router({
             message: "User must be logged in",
           });
         }
-        const userWorkspace = await verifyUserWorkspaceAccess(
-          userId!,
-          workspaceId,
-        );
+        await verifyUserWorkspaceAccess(userId!, workspaceId);
 
         const project = await db.project.create({
           data: {

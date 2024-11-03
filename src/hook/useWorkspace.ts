@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-const defaultValues = {
-  id: "",
-};
-
 interface WorkSpaceState {
   workspaceId: string;
   setSetWorkspaceId: (workspaceId: string) => void;

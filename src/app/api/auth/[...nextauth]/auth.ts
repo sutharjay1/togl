@@ -11,8 +11,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
+      console.log({
+        session,
+        token,
+      });
       const dbUser = await db.user.findUnique({
-        where: { email: session?.user?.email! },
+        where: { email: session.user.email! },
       });
 
       if (dbUser && session.user) {
@@ -22,6 +26,11 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async signIn({ user, account, profile }) {
+      console.log({
+        user,
+        account,
+        profile,
+      });
       try {
         const dbUser = await db.user.findFirst({
           where: { email: user.email! },
