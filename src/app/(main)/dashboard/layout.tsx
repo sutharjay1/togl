@@ -15,10 +15,10 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
 
-  const { setSetWorkspaceId } = useWorkspace();
+  const { setWorkspaceId } = useWorkspace();
 
   useEffect(() => {
-    setSetWorkspaceId(pathname?.split("/")[2]);
+    setWorkspaceId(pathname?.split("/")[2]);
   }, [pathname]);
 
   return (

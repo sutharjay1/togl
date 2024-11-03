@@ -3,14 +3,14 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 interface WorkSpaceState {
   workspaceId: string;
-  setSetWorkspaceId: (workspaceId: string) => void;
+  setWorkspaceId: (workspaceId: string) => void;
 }
 
 export const useWorkspace = create<WorkSpaceState>()(
   persist(
     (set) => ({
       workspaceId: "",
-      setSetWorkspaceId: (workspaceId: string) => {
+      setWorkspaceId: (workspaceId: string) => {
         set({ workspaceId });
       },
     }),

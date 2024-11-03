@@ -15,6 +15,7 @@ import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { P } from "../ui/typography";
 import Hint from "./hint";
+import { useWorkspace } from "@/hook/useWorkspace";
 
 const UserDropdownMenu = ({
   className,
@@ -25,6 +26,13 @@ const UserDropdownMenu = ({
 }) => {
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
+  const { setWorkspaceId } = useWorkspace();
+  const handleLogout = () => {
+    signOut({
+      callbackUrl: "/",
+    });
+    setWorkspaceId("");
+  };
 
   return (
     <DropdownMenu>
@@ -79,14 +87,7 @@ const UserDropdownMenu = ({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() =>
-            signOut({
-              callbackUrl: "/",
-            })
-          }
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign Out</span>
         </DropdownMenuItem>
