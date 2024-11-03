@@ -1,5 +1,5 @@
 import Logo from "@/components/global/logo";
-import ContinueWithGoogle from "@/components/hero/continue-with-google";
+
 import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";
 import { geistSans } from "@/lib/fonts";
@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import { GrGithub } from "react-icons/gr";
+import ContinueWithGoogle from "./_components/continue-with-google";
 
 const SignIn = () => {
   return (

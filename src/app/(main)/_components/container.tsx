@@ -1,5 +1,6 @@
 "use client";
 
+import { useWorkspace } from "@/hook/useWorkspace";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,8 +13,8 @@ type Props = {
 
 const Container = ({ children }: Props) => {
   const pathname = usePathname();
-
   const isActive = (path: string) => pathname === path;
+  const { workspaceId } = useWorkspace();
 
   return (
     <div className="mt-24 flex-1 overflow-hidden">
@@ -21,7 +22,7 @@ const Container = ({ children }: Props) => {
         <div className="flex items-center justify-between border-b pb-2">
           <nav className="flex space-x-1">
             <Link
-              href="/dashboard/projects"
+              href={`/dashboard/${workspaceId}/projects`}
               className={cn(
                 "inline-flex h-10 items-center justify-center whitespace-nowrap rounded-t-md px-4 py-2 text-sm font-medium transition-all hover:text-foreground focus-visible:outline-none",
                 isActive("/dashboard/projects")
@@ -32,7 +33,7 @@ const Container = ({ children }: Props) => {
               Projects
             </Link>
             <Link
-              href="/dashboard/team"
+              href={`/dashboard/${workspaceId}/team`}
               className={cn(
                 "inline-flex h-10 items-center justify-center whitespace-nowrap rounded-t-md px-4 py-2 text-sm font-medium transition-all hover:text-foreground focus-visible:outline-none",
                 isActive("/dashboard/team")
@@ -43,7 +44,7 @@ const Container = ({ children }: Props) => {
               Team
             </Link>
             <Link
-              href="/dashboard/settings"
+              href={`/dashboard/${workspaceId}/settings`}
               className={cn(
                 "inline-flex h-10 items-center justify-center whitespace-nowrap rounded-t-md px-4 py-2 text-sm font-medium transition-all hover:text-foreground focus-visible:outline-none",
                 isActive("/dashboard/settings")

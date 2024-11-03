@@ -3,9 +3,13 @@ import { ThemeProvider } from "@/providers/theme-provider";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import ClientProvider from "@/providers/client-provider";
 import { QueryProvider } from "@/providers/query-provider";
+import TRPCProvider from "@/providers/trpc-provider";
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { Toaster } from "sonner";
+import { authOptions } from "./api/auth/[...nextauth]/auth";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,66 +25,7 @@ export const metadata: Metadata = {
     "development",
   ],
   authors: [{ name: "Togl Team" }],
-  creator: "Togl",
-  publisher: "Togl",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: "Togl - Feature Management Made Easy",
-    description:
-      "Empower your development team with Togl's advanced feature management system. Real-time toggling, sophisticated state management, and granular access control.",
-    url: "https://togl.dev",
-    siteName: "Togl",
-    images: [
-      {
-        url: "https://togl.dev/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Togl - Enterprise-Grade Feature Management",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Togl - Enterprise-Grade Feature Management",
-    description:
-      "Seamless feature deployment and A/B testing at scale with Togl's high-performance system.",
-    creator: "@togldev",
-    images: [
-      "https://upload.wikimedia.org/wikipedia/commons/3/35/GitLab_icon.svg",
-    ],
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
-  ],
-  manifest: "/site.webmanifest",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  creator: "Jay Suthar",
 };
 
 export default async function RootLayout({
@@ -88,6 +33,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body
@@ -96,20 +43,24 @@ export default async function RootLayout({
           geistSans.className,
         )}
       >
-        <TooltipProvider>
-          <QueryProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Toaster />
+        <ClientProvider session={session}>
+          <TRPCProvider>
+            <TooltipProvider>
+              <QueryProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="dark"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <Toaster />
 
-              {children}
-            </ThemeProvider>
-          </QueryProvider>
-        </TooltipProvider>
+                  {children}
+                </ThemeProvider>
+              </QueryProvider>
+            </TooltipProvider>
+          </TRPCProvider>
+        </ClientProvider>
       </body>
     </html>
   );

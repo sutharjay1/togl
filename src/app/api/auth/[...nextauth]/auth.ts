@@ -1,6 +1,6 @@
-import NextAuth, { AuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import { db } from "@/db";
+import { AuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -11,11 +11,6 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      console.log({
-        session,
-        token,
-      });
-
       const dbUser = await db.user.findUnique({
         where: { email: session?.user?.email! },
       });
@@ -27,27 +22,26 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async signIn({ user, account, profile }) {
-      console.log({
-        user,
-        account,
-        profile,
-      });
-      const dbUser = await db.user.findFirst({
-        where: { email: user.email! },
-      });
-
-      if (!dbUser) {
-        await db.user.create({
-          data: {
-            email: user.email!,
-            name: user.name!,
-            // avatar: user.image!,
-            // role: "ADMIN",
-          },
+      try {
+        const dbUser = await db.user.findFirst({
+          where: { email: user.email! },
         });
-      }
 
-      return true;
+        if (!dbUser) {
+          await db.user.create({
+            data: {
+              email: user.email!,
+              name: user.name!,
+              avatar: user.image!,
+            },
+          });
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Sign in error:", error);
+        return false;
+      }
     },
   },
   session: {

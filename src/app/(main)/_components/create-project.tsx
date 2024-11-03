@@ -1,11 +1,9 @@
+import CreateProjectForm from "@/components/form/create-project";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Modal,
   ModalContent,
   ModalDescription,
-  ModalFooter,
   ModalHeader,
   ModalTitle,
   ModalTrigger,
@@ -35,19 +33,7 @@ const CreateProject = ({ show = true }: { show?: boolean }) => {
           </ModalDescription>
         </ModalHeader>
 
-        <div className="grid gap-4 py-4">
-          <Label htmlFor="project-name">Project name</Label>
-          <Input placeholder="Project name" />
-        </div>
-
-        <ModalFooter>
-          <Button variant="outline" className="hidden sm:flex">
-            Cancel
-          </Button>
-          <Button variant="shine" className="py-1">
-            Create Project
-          </Button>
-        </ModalFooter>
+        <CreateProjectForm />
       </ModalContent>
     </Modal>
   );

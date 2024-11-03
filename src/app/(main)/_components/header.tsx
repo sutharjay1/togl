@@ -1,13 +1,13 @@
 "use client";
 
+import UserWorkspace from "@/app/(main)/_components/user-workspace";
+import Logo from "@/components/global/logo";
+import UserDropdownMenu from "@/components/global/user-avatar";
+import { useOnClickOutside } from "@/hook/useClickOutside";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import Logo from "@/components/global/logo";
-import UserDropdownMenu from "@/components/global/user-avatar";
-import { useOnClickOutside } from "@/hook/use-click-outside";
 import { useRef, useState } from "react";
 
 const NAV_ITEMS = [
@@ -35,11 +35,13 @@ const Header = () => {
         <div className="relative flex items-center justify-between rounded-2xl bg-background/80 p-3 backdrop-blur-md">
           <Logo />
           <div className="hidden items-center gap-1 md:flex">
-            <div className="ml-2 mr-2 h-6 w-px bg-primary/10" />
+            <UserWorkspace variant="gooeyLeft" />
+            <div className="ml-2 mr-2 h-6 w-px bg-primary/10" />{" "}
             <UserDropdownMenu />
           </div>
           <div className="flex items-center gap-2 md:hidden">
             <div className="flex w-full flex-1 flex-grow flex-row space-x-2">
+              <UserWorkspace />
               <UserDropdownMenu className="px-1.5" variant="gooeyLeft" />
               {/* <Button
                 variant="gooeyRight"

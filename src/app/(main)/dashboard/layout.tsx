@@ -1,8 +1,11 @@
 "use client";
 
 import { P } from "@/components/ui/typography";
+import { useWorkspace } from "@/hook/useWorkspace";
 import { geistSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import Header from "../_components/header";
 
 export default function DashboardLayout({
@@ -10,6 +13,14 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const { setSetWorkspaceId } = useWorkspace();
+
+  useEffect(() => {
+    setSetWorkspaceId(pathname?.split("/")[2]);
+  }, [pathname]);
+
   return (
     <main
       className={cn(
