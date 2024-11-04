@@ -19,7 +19,7 @@ export default function DashboardLayout({
 
   useEffect(() => {
     setWorkspaceId(pathname?.split("/")[2]);
-  }, [pathname]);
+  }, [pathname, setWorkspaceId]);
 
   return (
     <main

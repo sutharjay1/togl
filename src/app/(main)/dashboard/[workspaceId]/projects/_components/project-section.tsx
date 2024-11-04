@@ -19,9 +19,11 @@ import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
 import { GitBranch, Loader2, MoreHorizontal, ToggleRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function ProjectSection() {
+  const router = useRouter();
   const { workspaceId } = useWorkspace();
 
   const {
@@ -111,6 +113,12 @@ export default function ProjectSection() {
     });
   };
 
+  const navigateToSettings = (projectId: string) => {
+    router.push(
+      `/dashboard/${workspaceId}/projects/${projectId}/settings/general`,
+    );
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
@@ -137,7 +145,11 @@ export default function ProjectSection() {
                 side="bottom"
                 className="w-40 bg-accent/25 p-2"
               >
-                <Button variant={"ghost"} className="w-full text-left text-sm">
+                <Button
+                  variant={"ghost"}
+                  className="w-full text-left text-sm"
+                  onClick={() => navigateToSettings(project.id)}
+                >
                   Settings
                 </Button>
                 <Button

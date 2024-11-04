@@ -47,7 +47,7 @@ export default function UserWorkspace({
         <Button
           variant={variant}
           className={cn(
-            "flex w-fit items-center gap-2 bg-transparent p-2 md:w-full",
+            "ml-4 flex w-fit items-center gap-2 bg-transparent md:w-full",
             className,
           )}
         >
