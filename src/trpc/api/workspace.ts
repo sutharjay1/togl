@@ -328,4 +328,57 @@ export const workspaceRouter = router({
         }
       }
     }),
+
+  getMembers: privateProcedure
+    .input(z.object({ workspaceId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { workspaceId } = input;
+
+      try {
+        const { session } = ctx;
+
+        const userId = session?.user.id;
+        if (!userId) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in",
+          });
+        }
+
+        const workspace = await db.workspace.findUnique({
+          where: { id: workspaceId },
+          include: {
+            members: {
+              where: {
+                userId: userId,
+              },
+              include: {
+                user: true,
+              },
+            },
+          },
+        });
+
+        if (!workspace) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Workspace not found",
+          });
+        }
+
+        return workspace.members;
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              error instanceof Error
+                ? error.message
+                : "An unexpected error occurred",
+          });
+        }
+      }
+    }),
 });

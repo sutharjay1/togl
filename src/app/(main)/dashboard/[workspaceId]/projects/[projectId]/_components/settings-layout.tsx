@@ -1,4 +1,4 @@
-import Container, { ProjectItems } from "@/app/(main)/_components/container";
+import Container from "@/app/(main)/_components/container";
 import { buttonVariants } from "@/components/ui/button";
 import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
@@ -13,17 +13,6 @@ interface SettingsLayoutProps {
 const SettingsLayout = ({ children }: SettingsLayoutProps) => {
   const { workspaceId } = useWorkspace();
   const { projectId } = useProject();
-
-  const projectItems: ProjectItems[] = [
-    {
-      label: "Project",
-      path: `/dashboard/${workspaceId}/projects`,
-    },
-    {
-      label: "Settings",
-      path: `/dashboard/${workspaceId}/projects/${projectId}/settings`,
-    },
-  ];
 
   const tabs = [
     {
@@ -46,7 +35,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
   ];
 
   return (
-    <Container projectItems={projectItems}>
+    <Container>
       <div className="container mx-auto flex gap-8 p-6">
         <aside className="w-64 space-y-6">
           <div>

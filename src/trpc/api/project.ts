@@ -19,7 +19,7 @@ const getProjectByIdSchema = z.object({
   projectId: z.string(),
 });
 
-const updateProjectSchema = z.object({
+export const updateProjectSchema = z.object({
   workspaceId: z.string(),
   projectId: z.string(),
   name: z.string().optional(),

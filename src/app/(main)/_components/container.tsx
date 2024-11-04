@@ -1,5 +1,6 @@
 "use client";
 
+import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -14,13 +15,28 @@ export type ProjectItems = {
 
 type Props = {
   children: React.ReactNode;
-  projectItems?: ProjectItems[];
 };
 
-const Container = ({ children, projectItems }: Props) => {
+const Container = ({ children }: Props) => {
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
   const { workspaceId } = useWorkspace();
+  const { projectId } = useProject();
+
+  const projectItems: ProjectItems[] = [
+    {
+      label: "Project",
+      path: `/dashboard/${workspaceId}/projects`,
+    },
+    {
+      label: "Members",
+      path: `/dashboard/${workspaceId}/projects/${projectId}/members`,
+    },
+    {
+      label: "Settings",
+      path: `/dashboard/${workspaceId}/projects/${projectId}/settings/general`,
+    },
+  ];
 
   return (
     <div className="mt-24 flex-1 overflow-hidden">
@@ -67,7 +83,7 @@ const Container = ({ children, projectItems }: Props) => {
                   Team
                 </Link>
                 <Link
-                  href={`/dashboard/${workspaceId}/settings`}
+                  href={`/dashboard/${workspaceId}/settings/general`}
                   className={cn(
                     "inline-flex h-10 items-center justify-center whitespace-nowrap rounded-t-md px-4 py-2 text-sm font-medium transition-all hover:text-foreground focus-visible:outline-none",
                     isActive(`"/dashboard/settings"`)

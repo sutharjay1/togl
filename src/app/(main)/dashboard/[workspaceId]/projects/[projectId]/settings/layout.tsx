@@ -17,11 +17,7 @@ const ProjectLayout = ({ children }: ProjectLayoutProps) => {
     setProjectId(pathname.split("/")[4]);
   }, [pathname, setProjectId]);
 
-  return (
-    <SettingsLayout>
-      <div className="h-screen overflow-y-auto">{children}</div>a
-    </SettingsLayout>
-  );
+  return <SettingsLayout>{children}</SettingsLayout>;
 };
 
 export default ProjectLayout;
