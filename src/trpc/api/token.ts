@@ -10,6 +10,7 @@ export const createTokenSchema = z.object({
 });
 
 export const getTokenSchema = z.object({
+  projectId: z.string(),
   workspaceId: z.string(),
 });
 
@@ -83,7 +84,7 @@ export const tokenRouter = router({
   getTokens: privateProcedure
     .input(getTokenSchema)
     .query(async ({ input, ctx }) => {
-      const { workspaceId } = input;
+      const { projectId, workspaceId } = input;
       const { session } = ctx;
 
       try {
@@ -96,7 +97,11 @@ export const tokenRouter = router({
         }
 
         await verifyUserWorkspaceAccess(userId, workspaceId);
-        const result = await db.token.findMany();
+        const result = await db.token.findMany({
+          where: {
+            projectId,
+          },
+        });
         return result;
       } catch (error) {
         if (error instanceof TRPCError) {
