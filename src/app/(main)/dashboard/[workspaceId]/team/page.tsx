@@ -1,7 +1,7 @@
-import Container from "../../../_components/container";
+import Container from "@/app/(main)/_components/container";
 
 const Team = () => {
-  return <Container>Team</Container>;
+  return <Container showItems={false}>Team</Container>;
 };
 
 export default Team;
