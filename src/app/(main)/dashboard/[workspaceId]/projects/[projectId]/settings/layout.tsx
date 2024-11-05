@@ -3,7 +3,7 @@
 import { useProject } from "@/hook/useProject";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
-import SettingsLayout from "../_components/settings-layout";
+import SettingsLayout from "../../../../../_components/settings-layout";
 
 type ProjectLayoutProps = {
   children: React.ReactNode;

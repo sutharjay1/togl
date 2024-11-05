@@ -128,7 +128,7 @@ export default function ProjectSection() {
         >
           <Card
             key={project.id}
-            className="h-40 flex-1 cursor-pointer border-border/25 bg-accent/25 hover:border-[1px] hover:border-border/90"
+            className="h-40 flex-1 cursor-pointer border-border/25 bg-zinc-900/90 hover:border-[1px] hover:border-border/90"
           >
             <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
               <div className="space-y-1">
@@ -147,7 +147,7 @@ export default function ProjectSection() {
                 <DropdownMenuContent
                   align="start"
                   side="bottom"
-                  className="w-40 bg-accent/25 p-2"
+                  className="w-40 bg-zinc-900/90 p-2"
                 >
                   <Button
                     variant={"ghost"}

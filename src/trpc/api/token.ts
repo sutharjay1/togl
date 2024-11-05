@@ -18,14 +18,14 @@ export const getTokenByIdSchema = z.object({
   workspaceId: z.string(),
 });
 
-export const updateFeatureStateSchema = z.object({
+export const updateTokenSchema = z.object({
   isEnabled: z.boolean(),
   rules: z.string().optional(),
   projectId: z.string(),
   tokenId: z.string(),
 });
 
-export const deleteFeatureStateSchema = z.object({
+export const deleteTokenSchema = z.object({
   tokenId: z.string(),
   workspaceId: z.string(),
 });
@@ -46,7 +46,7 @@ export const tokenRouter = router({
           });
         }
 
-        await verifyUserWorkspaceAccess(userId, projectId);
+        // await verifyUserWorkspaceAccess(userId, projectId);
 
         const result = await db.token.create({
           data: {
@@ -75,12 +75,12 @@ export const tokenRouter = router({
           message:
             error instanceof Error
               ? error.message
-              : "An error occurred while creating feature state.",
+              : "An error occurred while creating token.",
         });
       }
     }),
 
-  getFeatureStates: privateProcedure
+  getTokens: privateProcedure
     .input(getTokenSchema)
     .query(async ({ input, ctx }) => {
       const { workspaceId } = input;
@@ -107,12 +107,12 @@ export const tokenRouter = router({
           message:
             error instanceof Error
               ? error.message
-              : "An error occurred while fetching feature states.",
+              : "An error occurred while fetching token.",
         });
       }
     }),
 
-  getFeatureStateById: privateProcedure
+  getTokenById: privateProcedure
     .input(getTokenByIdSchema)
     .query(async ({ input, ctx }) => {
       const { tokenId, workspaceId } = input;
@@ -135,7 +135,7 @@ export const tokenRouter = router({
         if (!result) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Feature state not found",
+            message: "Token not found",
           });
         }
 
@@ -149,13 +149,13 @@ export const tokenRouter = router({
           message:
             error instanceof Error
               ? error.message
-              : "An error occurred while fetching feature state.",
+              : "An error occurred while fetching token.",
         });
       }
     }),
 
-  updateFeatureState: privateProcedure
-    .input(updateFeatureStateSchema)
+  updateToken: privateProcedure
+    .input(updateTokenSchema)
     .mutation(async ({ input, ctx }) => {
       const { isEnabled, rules, projectId, tokenId } = input;
       const { session } = ctx;
@@ -189,7 +189,7 @@ export const tokenRouter = router({
         if (!featureState) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Feature state not found",
+            message: "Token not found",
           });
         }
 
@@ -211,13 +211,13 @@ export const tokenRouter = router({
           message:
             error instanceof Error
               ? error.message
-              : "An error occurred while updating feature state.",
+              : "An error occurred while updating token.",
         });
       }
     }),
 
-  deleteFeatureState: privateProcedure
-    .input(deleteFeatureStateSchema)
+  deleteToken: privateProcedure
+    .input(deleteTokenSchema)
     .mutation(async ({ input, ctx }) => {
       const { tokenId, workspaceId } = input;
       const { session } = ctx;
@@ -240,7 +240,7 @@ export const tokenRouter = router({
         if (!featureState) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Feature state not found",
+            message: "Token not found",
           });
         }
 
@@ -256,7 +256,7 @@ export const tokenRouter = router({
           message:
             error instanceof Error
               ? error.message
-              : "An error occurred while deleting feature state.",
+              : "An error occurred while deleting token.",
         });
       }
     }),

@@ -5,8 +5,9 @@ import { H1, P } from "@/components/ui/typography";
 import { geistSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Mail } from "lucide-react";
+
 import Link from "next/link";
-import { GrGithub } from "react-icons/gr";
+import ContinueWithGithub from "./_components/continue-with-github";
 import ContinueWithGoogle from "./_components/continue-with-google";
 
 const SignIn = () => {
@@ -39,7 +40,7 @@ const SignIn = () => {
       <div className="flex h-screen flex-col items-center justify-center bg-black">
         <div className="w-full max-w-[400px] space-y-8 px-4">
           <div className="flex flex-col items-center space-y-4">
-            <Logo text="text-4xl sm:text-5xl lg:text-5xl mb-6" />
+            <Logo text="text-4xl sm:text-5xl lg:text-5xl" />
             <H1 className="mb-6 font-inter text-xl font-semibold tracking-tight sm:text-2xl lg:text-2xl">
               Login to Platform
             </H1>
@@ -48,13 +49,7 @@ const SignIn = () => {
           <div className="space-y-3">
             <ContinueWithGoogle />
 
-            <Button
-              variant="gooeyRight"
-              className="w-full rounded-xl border border-input bg-transparent py-2 text-base text-primary hover:text-primary"
-            >
-              <GrGithub className="mr-4 h-5 w-5" />
-              Continue with GitHub
-            </Button>
+            <ContinueWithGithub />
 
             <div className="relative py-3">
               <div className="absolute inset-0 flex items-center">

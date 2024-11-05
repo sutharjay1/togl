@@ -75,9 +75,12 @@ export default function UserWorkspace({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="-mr-4 mb-2 w-56" align="end">
+      <DropdownMenuContent
+        className="w-64 space-y-1 bg-zinc-900/90 p-2 text-zinc-300"
+        align="end"
+      >
         <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-zinc-800" />
         {loadingWorkspaces ? (
           <div className="space-y-2">
             {[...Array(3)].map((_, i) => (
@@ -86,10 +89,13 @@ export default function UserWorkspace({
           </div>
         ) : (
           workspaces?.workspaces?.map((workspace) => (
-            <DropdownMenuItem key={workspace.id}>
+            <DropdownMenuItem
+              key={workspace.id}
+              className="mb-4 px-2 py-1.5 focus:bg-zinc-800 focus:text-white"
+            >
               <Link
                 href={`/dashboard/${workspace.id}/projects`}
-                className="flex items-center"
+                className="flex w-full items-center"
               >
                 <Avatar className="mr-2 h-6 w-6">
                   <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
@@ -97,10 +103,7 @@ export default function UserWorkspace({
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex items-center justify-between">
-                  <P className="[&:not(:first-child)]:mt-0">
-                    {" "}
-                    {workspace.name}
-                  </P>
+                  <P className="[&:not(:first-child)]:mt-0">{workspace.name}</P>
                   {workspace.id === currentWorkspace?.workspace?.id && (
                     <Check className="ml-auto h-4 w-4" />
                   )}

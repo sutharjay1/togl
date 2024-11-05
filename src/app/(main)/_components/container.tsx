@@ -1,23 +1,23 @@
 "use client";
 
+import CreateTokenForm from "@/components/form/create-token";
+import { Button } from "@/components/ui/button";
+import {
+  Modal,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle,
+  ModalTrigger,
+} from "@/components/ui/modal";
 import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import CreateProject from "./create-project";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { P } from "@/components/ui/typography";
 
 export type ProjectItems = {
   label: string;
@@ -112,23 +112,25 @@ const Container = ({ children, showItems = false }: Props) => {
           {projectItems && !showItems ? (
             <CreateProject show={false} />
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <Modal>
+              <ModalTrigger asChild className="mb-2">
                 <Button variant="shine" className="h-9 py-1">
                   <Plus className="mr-2 h-4 w-4" /> New Token
                 </Button>
-              </DropdownMenuTrigger>
+              </ModalTrigger>
+              <ModalContent>
+                <ModalHeader>
+                  <ModalTitle className="text-left">
+                    Create new project
+                  </ModalTitle>
+                  <ModalDescription className="text-left">
+                    Create a new project to get started
+                  </ModalDescription>
+                </ModalHeader>
 
-              <DropdownMenuContent className="mb-2 ml-4 w-56" align="end">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <P className="text-sm font-medium leading-none"> </P>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem></DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <CreateTokenForm />
+              </ModalContent>
+            </Modal>
           )}
         </div>
         <main className="w-full py-6">{children}</main>
