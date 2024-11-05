@@ -1,5 +1,5 @@
 import { apiKeyRouter } from "./api/api-key";
-import { featureStateRouter } from "./api/feature";
+import { tokenRouter } from "./api/token";
 import { projectRouter } from "./api/project";
 import { workspaceRouter } from "./api/workspace";
 import { router } from "./trpc";
@@ -7,7 +7,7 @@ import { router } from "./trpc";
 export const appRouter = router({
   workspace: workspaceRouter,
   project: projectRouter,
-  feature: featureStateRouter,
+  token: tokenRouter,
   apiKey: apiKeyRouter,
 });
 

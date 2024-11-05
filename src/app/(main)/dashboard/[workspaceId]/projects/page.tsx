@@ -3,7 +3,7 @@ import ProjectSection from "./_components/project-section";
 
 export default function Dashboard() {
   return (
-    <Container>
+    <Container showItems={false}>
       <ProjectSection />
     </Container>
   );

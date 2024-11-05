@@ -17,7 +17,7 @@ const ProjectLayout = ({ children }: ProjectLayoutProps) => {
     setProjectId(pathname.split("/")[4]);
   }, [pathname, setProjectId]);
 
-  return <SettingsLayout>{children}</SettingsLayout>;
+  return <SettingsLayout pathname={pathname}>{children}</SettingsLayout>;
 };
 
 export default ProjectLayout;

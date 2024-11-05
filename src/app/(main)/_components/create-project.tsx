@@ -13,7 +13,7 @@ import { Plus } from "lucide-react";
 const CreateProject = ({ show = true }: { show?: boolean }) => {
   return (
     <Modal>
-      <ModalTrigger asChild>
+      <ModalTrigger asChild className="mb-2">
         {show ? (
           <Button variant="shine" className="h-9 py-1">
             <Plus className="mr-2 h-4 w-4" /> New Project

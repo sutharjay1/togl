@@ -64,10 +64,6 @@ export const workspaceRouter = router({
           },
         });
 
-        console.log({
-          workspace: newWorkspace,
-        });
-
         return {
           workspace: newWorkspace,
           refreshToken: user.refreshToken,

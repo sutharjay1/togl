@@ -3,18 +3,18 @@ import { privateProcedure, router } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-export const createFeatureStateSchema = z.object({
+export const createTokenSchema = z.object({
   isEnabled: z.boolean(),
   rules: z.string().optional(),
   projectId: z.string(),
 });
 
-export const getFeatureStatesSchema = z.object({
+export const getTokenSchema = z.object({
   workspaceId: z.string(),
 });
 
-export const getFeatureStateByIdSchema = z.object({
-  featureStateId: z.string(),
+export const getTokenByIdSchema = z.object({
+  tokenId: z.string(),
   workspaceId: z.string(),
 });
 
@@ -22,17 +22,17 @@ export const updateFeatureStateSchema = z.object({
   isEnabled: z.boolean(),
   rules: z.string().optional(),
   projectId: z.string(),
-  featureStateId: z.string(),
+  tokenId: z.string(),
 });
 
 export const deleteFeatureStateSchema = z.object({
-  featureStateId: z.string(),
+  tokenId: z.string(),
   workspaceId: z.string(),
 });
 
-export const featureStateRouter = router({
+export const tokenRouter = router({
   create: privateProcedure
-    .input(createFeatureStateSchema)
+    .input(createTokenSchema)
     .mutation(async ({ input, ctx }) => {
       const { isEnabled, rules, projectId } = input;
       const { session } = ctx;
@@ -48,7 +48,7 @@ export const featureStateRouter = router({
 
         await verifyUserWorkspaceAccess(userId, projectId);
 
-        const result = await db.featureState.create({
+        const result = await db.token.create({
           data: {
             isEnabled,
             rules,
@@ -59,7 +59,7 @@ export const featureStateRouter = router({
               include: {
                 workspace: true,
                 apiKeys: true,
-                flags: true,
+                token: true,
                 _count: true,
               },
             },
@@ -81,7 +81,7 @@ export const featureStateRouter = router({
     }),
 
   getFeatureStates: privateProcedure
-    .input(getFeatureStatesSchema)
+    .input(getTokenSchema)
     .query(async ({ input, ctx }) => {
       const { workspaceId } = input;
       const { session } = ctx;
@@ -96,7 +96,7 @@ export const featureStateRouter = router({
         }
 
         await verifyUserWorkspaceAccess(userId, workspaceId);
-        const result = await db.featureState.findMany();
+        const result = await db.token.findMany();
         return result;
       } catch (error) {
         if (error instanceof TRPCError) {
@@ -113,9 +113,9 @@ export const featureStateRouter = router({
     }),
 
   getFeatureStateById: privateProcedure
-    .input(getFeatureStateByIdSchema)
+    .input(getTokenByIdSchema)
     .query(async ({ input, ctx }) => {
-      const { featureStateId, workspaceId } = input;
+      const { tokenId, workspaceId } = input;
       const { session } = ctx;
 
       try {
@@ -128,8 +128,8 @@ export const featureStateRouter = router({
         }
 
         await verifyUserWorkspaceAccess(userId, workspaceId);
-        const result = await db.featureState.findUnique({
-          where: { id: featureStateId },
+        const result = await db.token.findUnique({
+          where: { id: tokenId },
         });
 
         if (!result) {
@@ -157,7 +157,7 @@ export const featureStateRouter = router({
   updateFeatureState: privateProcedure
     .input(updateFeatureStateSchema)
     .mutation(async ({ input, ctx }) => {
-      const { isEnabled, rules, projectId, featureStateId } = input;
+      const { isEnabled, rules, projectId, tokenId } = input;
       const { session } = ctx;
 
       try {
@@ -182,8 +182,8 @@ export const featureStateRouter = router({
 
         await verifyUserWorkspaceAccess(userId, project.workspaceId);
 
-        const featureState = await db.featureState.findUnique({
-          where: { id: featureStateId },
+        const featureState = await db.token.findUnique({
+          where: { id: tokenId },
         });
 
         if (!featureState) {
@@ -193,8 +193,8 @@ export const featureStateRouter = router({
           });
         }
 
-        const result = await db.featureState.update({
-          where: { id: featureStateId },
+        const result = await db.token.update({
+          where: { id: tokenId },
           data: {
             isEnabled,
             rules,
@@ -219,7 +219,7 @@ export const featureStateRouter = router({
   deleteFeatureState: privateProcedure
     .input(deleteFeatureStateSchema)
     .mutation(async ({ input, ctx }) => {
-      const { featureStateId, workspaceId } = input;
+      const { tokenId, workspaceId } = input;
       const { session } = ctx;
 
       try {
@@ -233,8 +233,8 @@ export const featureStateRouter = router({
 
         await verifyUserWorkspaceAccess(userId, workspaceId);
 
-        const featureState = await db.featureState.findUnique({
-          where: { id: featureStateId },
+        const featureState = await db.token.findUnique({
+          where: { id: tokenId },
         });
 
         if (!featureState) {
@@ -244,8 +244,8 @@ export const featureStateRouter = router({
           });
         }
 
-        await db.featureState.delete({
-          where: { id: featureStateId },
+        await db.token.delete({
+          where: { id: tokenId },
         });
       } catch (error) {
         if (error instanceof TRPCError) {

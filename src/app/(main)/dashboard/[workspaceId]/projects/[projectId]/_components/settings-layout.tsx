@@ -8,9 +8,10 @@ import Link from "next/link";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
+  pathname: string;
 }
 
-const SettingsLayout = ({ children }: SettingsLayoutProps) => {
+const SettingsLayout = ({ children, pathname }: SettingsLayoutProps) => {
   const { workspaceId } = useWorkspace();
   const { projectId } = useProject();
 
@@ -35,7 +36,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
   ];
 
   return (
-    <Container>
+    <Container showItems={true}>
       <div className="container mx-auto flex gap-8 p-6">
         <aside className="w-64 space-y-6">
           <div>
@@ -52,7 +53,9 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
                   key={tab.href}
                   href={tab.disabled ? "#" : tab.href}
                   className={cn(
-                    buttonVariants({ variant: "ghost" }),
+                    buttonVariants({
+                      variant: pathname === tab.href ? "shine" : "ghost",
+                    }),
                     "justify-start",
                     tab.disabled && "cursor-not-allowed opacity-50",
                   )}

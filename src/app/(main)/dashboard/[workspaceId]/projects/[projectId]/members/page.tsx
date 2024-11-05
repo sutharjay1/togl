@@ -40,7 +40,7 @@ export default function Members() {
   });
 
   return (
-    <Container>
+    <Container showItems={true}>
       <div className="container mx-auto flex flex-col gap-4 p-6">
         <div className="w-64 space-y-1">
           <h1 className="text-2xl font-semibold">Members</h1>

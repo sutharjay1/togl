@@ -122,63 +122,68 @@ export default function ProjectSection() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
-        <Card
+        <Link
           key={project.id}
-          className="h-40 flex-1 cursor-pointer border-border/25 bg-accent/25 hover:border-[1px] hover:border-border/90"
+          href={`/dashboard/${workspaceId}/projects/${project.id}/tokens`}
         >
-          <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-            <div className="space-y-1">
-              <H4 className="font-medium leading-none">{project.name}</H4>
-              <P className="text-sm text-muted-foreground [&:not(:first-child)]:mt-0">
-                No tokens
-              </P>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-9 w-9 p-0">
-                  <MoreHorizontal className="h-5 w-5" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                side="bottom"
-                className="w-40 bg-accent/25 p-2"
+          <Card
+            key={project.id}
+            className="h-40 flex-1 cursor-pointer border-border/25 bg-accent/25 hover:border-[1px] hover:border-border/90"
+          >
+            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+              <div className="space-y-1">
+                <H4 className="font-medium leading-none">{project.name}</H4>
+                <P className="text-sm text-muted-foreground [&:not(:first-child)]:mt-0">
+                  No tokens
+                </P>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-9 w-9 p-0">
+                    <MoreHorizontal className="h-5 w-5" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  side="bottom"
+                  className="w-40 bg-accent/25 p-2"
+                >
+                  <Button
+                    variant={"ghost"}
+                    className="w-full text-left text-sm"
+                    onClick={() => navigateToSettings(project.id)}
+                  >
+                    Settings
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left text-sm text-destructive hover:bg-destructive/25 hover:text-destructive"
+                    onClick={() => handleDeleteProject(project.id)}
+                  >
+                    {deleteLoading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : null}{" "}
+                    Delete Project
+                  </Button>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </CardHeader>
+            <CardContent></CardContent>
+            <CardFooter className="">
+              <Button
+                variant="link"
+                className="mb-8 h-auto p-0 text-indigo-600"
+                asChild
               >
-                <Button
-                  variant={"ghost"}
-                  className="w-full text-left text-sm"
-                  onClick={() => navigateToSettings(project.id)}
-                >
-                  Settings
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full text-left text-sm text-destructive hover:bg-destructive/25 hover:text-destructive"
-                  onClick={() => handleDeleteProject(project.id)}
-                >
-                  {deleteLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : null}{" "}
-                  Delete Project
-                </Button>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </CardHeader>
-          <CardContent></CardContent>
-          <CardFooter className="">
-            <Button
-              variant="link"
-              className="mb-8 h-auto p-0 text-indigo-600"
-              asChild
-            >
-              <Link href="#" className="flex items-center gap-2">
-                <GitBranch className="h-4 w-4" />
-                Connect Git Repository
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
+                <Link href="#" className="flex items-center gap-2">
+                  <GitBranch className="h-4 w-4" />
+                  Connect Git Repository
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>{" "}
+        </Link>
       ))}
     </div>
   );

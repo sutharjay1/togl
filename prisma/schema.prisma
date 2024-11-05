@@ -44,20 +44,20 @@ model UserWorkspace {
 }
 
 model Project {
-  id          String         @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   description String?
   workspaceId String
-  workspace   Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  flags       FeatureState[]
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  token       Token[]
   apiKeys     ApiKey[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@unique([workspaceId, name])
 }
 
-model FeatureState {
+model Token {
   id        String   @id @default(cuid())
   isEnabled Boolean  @default(false)
   rules     Json?
