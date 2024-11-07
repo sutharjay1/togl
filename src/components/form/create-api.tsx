@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Form,
   FormControl,
@@ -19,20 +17,23 @@ import { trpc } from "@/trpc/client";
 import { TRPCClientError } from "@trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useProject } from "@/hook/useProject";
 
-const WorkspaceSchema = z.object({
-  name: z.string().min(1, "Workspace name is required"),
+const APIKeySchema = z.object({
+  name: z.string().min(1, "API Key name is required"),
+  projectId: z.string(),
 });
 
-const CreateWorkspaceForm = () => {
+const CreateAPIKeyForm = () => {
   const router = useRouter();
+  const { projectId } = useProject();
 
-  const { mutateAsync: createWorkspace, isLoading: pending } =
-    trpc.workspace.create.useMutation({
+  const { mutateAsync: createAPIKey, isLoading: pending } =
+    trpc.apiKey.create.useMutation({
       onSuccess: (data) => {
         if (data) {
-          toast.success("Workspace Created", {
-            description: "Your workspace has been created",
+          toast.success("API Key Created", {
+            description: "Your API key has been created",
             duration: 3000,
             position: "bottom-left",
             style: {
@@ -43,19 +44,23 @@ const CreateWorkspaceForm = () => {
             className: "border",
           });
 
-          router.push(`/dashboard/${data.workspace.id}/projects`);
+          router.refresh();
         }
       },
     });
 
-  const handleCreateWorkspace = async (name: string) => {
-    const loadId = toast.loading("Creating workspace...", {
-      duration: 3000,
-      position: "bottom-left",
-    });
+  const form = useForm<z.infer<typeof APIKeySchema>>({
+    mode: "onChange",
+    resolver: zodResolver(APIKeySchema),
+    defaultValues: {
+      name: "",
+      projectId: projectId,
+    },
+  });
 
+  const handleSubmit = async (values: z.infer<typeof APIKeySchema>) => {
     try {
-      await createWorkspace({ name });
+      await createAPIKey(values);
     } catch (error) {
       if (error instanceof TRPCClientError) {
         toast.error(error.message, {
@@ -82,21 +87,7 @@ const CreateWorkspaceForm = () => {
           className: "border-[1px]",
         });
       }
-    } finally {
-      toast.dismiss(loadId);
     }
-  };
-
-  const form = useForm<z.infer<typeof WorkspaceSchema>>({
-    mode: "onChange",
-    resolver: zodResolver(WorkspaceSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
-  const handleSubmit = async (values: z.infer<typeof WorkspaceSchema>) => {
-    await handleCreateWorkspace(values.name);
   };
 
   return (
@@ -110,12 +101,31 @@ const CreateWorkspaceForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className=" ">Workspace Name</FormLabel>
+              <FormLabel className=" ">API Key Name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Workspace Name"
+                  placeholder="API Key Name"
                   disabled={pending}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="projectId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className=" ">Project ID</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Project ID"
+                  disabled={pending}
+                  readOnly
                 />
               </FormControl>
               <FormMessage />
@@ -136,7 +146,7 @@ const CreateWorkspaceForm = () => {
                 Creating...
               </>
             ) : (
-              "Create Workspace"
+              "Create API Key"
             )}
           </Button>
           <Button
@@ -152,4 +162,4 @@ const CreateWorkspaceForm = () => {
   );
 };
 
-export default CreateWorkspaceForm;
+export default CreateAPIKeyForm;

@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "@/app/(main)/_components/container";
+import JsonFormatter from "@/components/global/json-formatter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -23,13 +24,9 @@ export default function Tokens() {
     workspaceId,
   });
 
-  console.log({
-    data,
-  });
-
   return (
     <Container showItems={true}>
-      <div className="container mx-auto flex flex-col gap-4 p-6">
+      <div className="mx-auto flex flex-col gap-4 px-2 py-6">
         <div className="w-64 space-y-1">
           <h1 className="text-2xl font-semibold">Tokens</h1>
           <p className="text-sm text-muted-foreground">
@@ -40,8 +37,10 @@ export default function Tokens() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>ProjectID</TableHead>
+                <TableHead>TokenID</TableHead>
+                <TableHead className="cursor-pointer">Rules</TableHead>
                 <TableHead>Enabled</TableHead>
-                <TableHead>Rules</TableHead>
                 <TableHead className="text-right">Created</TableHead>
               </TableRow>
             </TableHeader>
@@ -68,19 +67,26 @@ export default function Tokens() {
                 !isLoading &&
                 data &&
                 data.length > 0 &&
-                data?.map((token: any) => (
-                  <TableRow key={token.id}>
-                    <TableCell className="gap-2 font-medium">
-                      <Switch checked={token.isEnabled} />
-                      {token.isEnabled ? "Enabled" : "Disabled"}
-                    </TableCell>
-
-                    <TableCell>{JSON.stringify(token.rules)}</TableCell>
-                    <TableCell className="text-right">
-                      {new Date(token.createdAt).toLocaleDateString()}
-                    </TableCell>
-                  </TableRow>
-                ))
+                data?.map((token: any) => {
+                  return (
+                    <TableRow key={token.id}>
+                      <TableCell>{projectId}</TableCell>
+                      <TableCell>{token.id}</TableCell>
+                      <TableCell>
+                        <JsonFormatter jsonString={token.rules} />
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center space-x-4">
+                          <Switch checked={token.isEnabled} className="mr-2" />
+                          {token.isEnabled ? "Enabled" : "Disabled"}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {new Date(token.createdAt).toLocaleDateString()}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>

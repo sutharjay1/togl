@@ -1,5 +1,6 @@
 "use client";
 
+import CreateAPIKey from "@/app/(main)/_components/create-api";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,8 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { P } from "@/components/ui/typography";
+import { H4, P } from "@/components/ui/typography";
 import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { updateProjectSchema } from "@/trpc/api/project";
@@ -150,17 +152,42 @@ const ProjectSettings = () => {
     });
   };
 
+  const { data: apiKeys, isLoading: apiKeysLoading } =
+    trpc.apiKey.getAPIKeys.useQuery({
+      projectId,
+    });
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Logo</h2>
         <div className="flex items-center gap-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed">
-            <CircleIcon className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Recommended size is 256&nbsp;x&nbsp;256px.
-          </p>
+          <H4>Generate API Key</H4>
+          <CreateAPIKey />
+        </div>
+        <Separator className="my-4" />
+        <div className="flex items-center gap-6">
+          <H4>API Keys</H4>
+          {apiKeysLoading ? (
+            <Skeleton className="h-8 w-40" />
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              {apiKeys && apiKeys.apiKeys.length > 0 ? (
+                apiKeys?.apiKeys.map((key) => (
+                  <div
+                    key={key.id}
+                    className="bg-muted-200 flex items-center gap-2 rounded-md p-2"
+                  >
+                    <p>{key.key}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  No API keys found
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <Separator className="my-4" />

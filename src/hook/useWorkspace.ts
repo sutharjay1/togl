@@ -14,6 +14,6 @@ export const useWorkspace = create<WorkSpaceState>()(
         set({ workspaceId });
       },
     }),
-    { name: "workspace", storage: createJSONStorage(() => localStorage) },
+    { name: "workspace", storage: createJSONStorage(() => sessionStorage) },
   ),
 );

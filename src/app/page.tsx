@@ -56,8 +56,8 @@ export default function Home() {
             "relative flex h-[calc(100vh-20rem)] flex-col items-center justify-center pt-20 md:pt-24",
           )}
         >
-          <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4">
-            <div className="max-w-3xl text-center">
+          <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-4">
+            <div className="mx-auto max-w-3xl text-center">
               <H1 className="mb-6 font-inter text-4xl font-bold tracking-tight sm:text-6xl lg:text-6xl">
                 Unleash features{" "}
                 <span className="bg-gradient-to-br from-primary to-primary-foreground bg-clip-text text-transparent">

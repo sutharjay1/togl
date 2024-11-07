@@ -109,6 +109,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.8
         version: 0.6.8(prettier@3.3.3)
+      prism-react-renderer:
+        specifier: ^2.4.0
+        version: 2.4.0(react@18.3.1)
       prisma:
         specifier: ^5.21.1
         version: 5.21.1
@@ -1464,6 +1467,12 @@ packages:
     resolution:
       {
         integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==,
+      }
+
+  "@types/prismjs@1.26.5":
+    resolution:
+      {
+        integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==,
       }
 
   "@types/prop-types@15.7.13":
@@ -4130,6 +4139,14 @@ packages:
         integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==,
       }
 
+  prism-react-renderer@2.4.0:
+    resolution:
+      {
+        integrity: sha512-327BsVCD/unU4CNLZTWVHyUHKnsqcvj2qbPlQ8MiBE2eq2rgctjigPA1Gp9HLF83kZ20zNN6jgizHJeEsyFYOw==,
+      }
+    peerDependencies:
+      react: ">=16.0.0"
+
   prisma@5.21.1:
     resolution:
       {
@@ -5920,6 +5937,8 @@ snapshots:
       pg-protocol: 1.7.0
       pg-types: 4.0.2
 
+  "@types/prismjs@1.26.5": {}
+
   "@types/prop-types@15.7.13": {}
 
   "@types/qs@6.9.16": {}
@@ -7596,6 +7615,12 @@ snapshots:
   prettier@3.3.3: {}
 
   pretty-format@3.8.0: {}
+
+  prism-react-renderer@2.4.0(react@18.3.1):
+    dependencies:
+      "@types/prismjs": 1.26.5
+      clsx: 2.1.1
+      react: 18.3.1
 
   prisma@5.21.1:
     dependencies:

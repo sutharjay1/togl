@@ -10,10 +10,8 @@ export const useProject = create<ProjectState>()(
   persist(
     (set) => ({
       projectId: "",
-      setProjectId: (projectId: string) => {
-        set({ projectId });
-      },
+      setProjectId: (projectId: string) => set({ projectId }),
     }),
-    { name: "project", storage: createJSONStorage(() => localStorage) },
+    { name: "project", storage: createJSONStorage(() => sessionStorage) },
   ),
 );

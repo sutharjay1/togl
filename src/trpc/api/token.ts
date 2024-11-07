@@ -102,6 +102,14 @@ export const tokenRouter = router({
             projectId,
           },
         });
+
+        if (!result) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Token not found",
+          });
+        }
+
         return result;
       } catch (error) {
         if (error instanceof TRPCError) {

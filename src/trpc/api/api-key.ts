@@ -28,7 +28,7 @@ const validateApiKeySchema = z.object({
 });
 
 export const apiKeyRouter = router({
-  createAPIKey: privateProcedure
+  create: privateProcedure
     .input(createAPIKeySchema)
     .mutation(async ({ input, ctx }) => {
       const { name, projectId } = input;
@@ -109,10 +109,10 @@ export const apiKeyRouter = router({
           orderBy: { createdAt: "desc" },
         });
 
-        return apiKeys.map((apiKey) => ({
-          ...apiKey,
+        return {
+          apiKeys,
           accessToken: user?.refreshToken,
-        }));
+        };
       } catch (error) {
         if (error instanceof TRPCError) {
           throw error;
