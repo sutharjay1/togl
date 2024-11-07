@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Highlight, themes } from "prism-react-renderer";
-import { Prism } from "prism-react-renderer";
+import { Highlight, Prism, themes } from "prism-react-renderer";
+import { useEffect, useState } from "react";
 (typeof global !== "undefined" ? global : window).Prism = Prism;
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface JsonFormatterProps {
   jsonString: string;
@@ -17,14 +15,9 @@ export default function JsonFormatter({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const parsedJson = JSON.parse(jsonString);
-      setFormattedJson(JSON.stringify(parsedJson, null, 2));
-      setError(null);
-    } catch (err) {
-      setError("Invalid JSON string");
-      setFormattedJson("");
-    }
+    const parsedJson = JSON.parse(jsonString);
+    setFormattedJson(JSON.stringify(parsedJson, null, 2));
+    setError(null);
   }, [jsonString]);
 
   if (error) {
