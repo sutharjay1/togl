@@ -30,9 +30,14 @@ export default function ProjectSection() {
     data: projects,
     isLoading,
     refetch,
-  } = trpc.project.getProjects.useQuery({
-    workspaceId,
-  });
+  } = trpc.project.getProjects.useQuery(
+    {
+      workspaceId,
+    },
+    {
+      refetchIntervalInBackground: true,
+    },
+  );
 
   const { mutateAsync: deleteProject, isLoading: deleteLoading } =
     trpc.project.deleteProject.useMutation({

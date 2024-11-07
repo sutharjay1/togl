@@ -15,13 +15,72 @@ import {
 import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { TRPCClientError } from "@trpc/client";
+import { toast } from "sonner";
 
 export default function Tokens() {
   const { workspaceId } = useWorkspace();
   const { projectId } = useProject();
-  const { data, isLoading } = trpc.token.getTokens.useQuery({
-    projectId,
-    workspaceId,
+  const { data, isLoading, refetch } = trpc.token.getTokens.useQuery(
+    {
+      projectId,
+      workspaceId,
+    },
+    {
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: true,
+    },
+  );
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ tokenId }: { tokenId: string }) => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/redis`, {
+          method: "PUT",
+          body: JSON.stringify({
+            flagId: tokenId,
+            projectId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (e) {
+        if (e instanceof TRPCClientError) {
+          throw new Error(e.message);
+        } else {
+          console.error("Unexpected error:", e);
+        }
+      }
+    },
+    onSuccess: () => {
+      refetch();
+      toast.success(`Feature Updated`, {
+        description: "Your feature has been updated",
+        duration: 3000,
+        position: "bottom-left",
+        style: {
+          backgroundColor: "rgba(0, 255, 0, 0.2)",
+          borderColor: "rgba(0, 255, 0, 0.4)",
+          color: "white",
+        },
+        className: "border",
+      });
+    },
+    onError: (error: any) => {
+      toast.error(error.message, {
+        description: "Please try again",
+        duration: 3000,
+        position: "bottom-left",
+        style: {
+          backgroundColor: "rgba(255, 0, 0, 0.2)",
+          borderColor: "rgba(255, 0, 0, 0.4)",
+          color: "white",
+        },
+        className: "border-[1px]",
+      });
+    },
   });
 
   return (
@@ -77,7 +136,15 @@ export default function Tokens() {
                       </TableCell>
                       <TableCell className="font-medium">
                         <div className="flex items-center space-x-4">
-                          <Switch checked={token.isEnabled} className="mr-2" />
+                          <Switch
+                            checked={token.isEnabled}
+                            className="mr-2"
+                            onClick={() =>
+                              mutateAsync({
+                                tokenId: token.id,
+                              })
+                            }
+                          />
                           {token.isEnabled ? "Enabled" : "Disabled"}
                         </div>
                       </TableCell>

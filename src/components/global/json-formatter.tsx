@@ -15,9 +15,11 @@ export default function JsonFormatter({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const parsedJson = JSON.parse(jsonString);
-    setFormattedJson(JSON.stringify(parsedJson, null, 2));
-    setError(null);
+    if (jsonString) {
+      const parsedJson = JSON.parse(jsonString);
+      setFormattedJson(JSON.stringify(parsedJson, null, 2));
+      setError(null);
+    }
   }, [jsonString]);
 
   if (error) {
