@@ -17,6 +17,7 @@ import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function Tokens() {
@@ -33,7 +34,7 @@ export default function Tokens() {
     },
   );
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isSuccess } = useMutation({
     mutationFn: async ({ tokenId }: { tokenId: string }) => {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/redis`, {
@@ -82,6 +83,12 @@ export default function Tokens() {
       });
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess, refetch]);
 
   return (
     <Container showItems={true}>

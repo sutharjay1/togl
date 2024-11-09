@@ -101,6 +101,7 @@ export const tokenRouter = router({
           where: {
             projectId,
           },
+          orderBy: { createdAt: "desc" },
         });
 
         if (!result) {

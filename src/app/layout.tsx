@@ -13,9 +13,9 @@ import { authOptions } from "./api/auth/[...nextauth]/auth";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Togl - Enterprise-Grade Feature Management System",
+  title: "Togl - Feature Management for Scalable Growth",
   description:
-    "Togl is a high-performance feature management system built with NextJS, designed for modern development teams. Enable seamless feature deployment and A/B testing at scale.",
+    "Togl is a reliable feature management platform designed to support your growth. Streamline feature deployment and run A/B tests effortlessly with efficient caching support for modern development needs.",
   keywords: [
     "feature management",
     "feature flags",
