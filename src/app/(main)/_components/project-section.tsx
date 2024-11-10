@@ -19,7 +19,7 @@ import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
 import { GitBranch, Loader2, MoreHorizontal, ToggleRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 
 export default function ProjectSection() {
