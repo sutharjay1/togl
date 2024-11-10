@@ -58,13 +58,15 @@ model Project {
 }
 
 model Token {
-  id        String   @id @default(cuid())
-  isEnabled Boolean  @default(false)
-  rules     Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String?
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isEnabled   Boolean  @default(false)
+  rules       Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String?
 }
 
 model ApiKey {

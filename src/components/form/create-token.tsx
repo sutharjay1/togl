@@ -23,6 +23,8 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 
 const tokenSchema = z.object({
+  name: z.string().min(1, "Token name is required"),
+  description: z.string().optional(),
   isEnabled: z.boolean().default(false),
   rules: z.string().optional(),
   projectId: z.string().optional(),
@@ -74,6 +76,8 @@ const CreateTokenForm = () => {
 
   const handleSubmit = async (data: TokenFormValues) => {
     await mutateAsync({
+      name: data.name,
+      description: data.description ? data.description : "",
       isEnabled: data.isEnabled,
       rules: data.rules,
       projectId: projectId,
@@ -82,7 +86,37 @@ const CreateTokenForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Token Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter token name" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter token description" {...field} />
+              </FormControl>
+              <FormDescription>Optional</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="isEnabled"

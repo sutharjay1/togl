@@ -4,6 +4,8 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const createTokenSchema = z.object({
+  name: z.string().min(1, "Token name is required"),
+  description: z.string().optional(),
   isEnabled: z.boolean(),
   rules: z.string().optional(),
   projectId: z.string(),
@@ -35,7 +37,7 @@ export const tokenRouter = router({
   create: privateProcedure
     .input(createTokenSchema)
     .mutation(async ({ input, ctx }) => {
-      const { isEnabled, rules, projectId } = input;
+      const { name, description, isEnabled, rules, projectId } = input;
       const { session } = ctx;
 
       try {
@@ -51,6 +53,8 @@ export const tokenRouter = router({
 
         const result = await db.token.create({
           data: {
+            name,
+            description: description ? description : "",
             isEnabled,
             rules,
             projectId,

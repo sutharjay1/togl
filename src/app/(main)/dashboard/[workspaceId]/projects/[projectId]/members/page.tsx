@@ -41,7 +41,7 @@ export default function Members() {
 
   return (
     <Container showItems={true}>
-      <div className="mx-auto flex flex-col gap-4 px-2 py-6">
+      <div className="mx-auto flex flex-col gap-4 px-3 py-6 md:px-0">
         <div className="w-64 space-y-1">
           <h1 className="text-2xl font-semibold">Members</h1>
           <p className="text-sm text-muted-foreground">

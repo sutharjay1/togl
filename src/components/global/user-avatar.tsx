@@ -9,16 +9,7 @@ import {
 import { useUser } from "@/hook/useUser";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { cn } from "@/lib/utils";
-import {
-  Command,
-  Home,
-  LogOut,
-  Monitor,
-  Moon,
-  Plus,
-  Settings,
-  Sun,
-} from "lucide-react";
+import { Home, LogOut, Monitor, Moon, Plus, Settings, Sun } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -73,32 +64,6 @@ const UserDropdownMenu = ({
         </Button>
       </DropdownMenuTrigger>
 
-      {/* <DropdownMenuContent className="mb-2 ml-4 w-56" align="end">
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <P className="text-sm font-medium leading-none">{user?.name}</P>
-            <P className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </P>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          <div className="flex w-full items-center">
-            <BrushIcon className="mr-2 h-4 w-4" />
-            <P className="text-sm [&:not(:first-child)]:mt-0">Toggle Theme</P>
-          </div>
-        </DropdownMenuItem>
-         
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Sign Out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent> */}
       <DropdownMenuContent
         className="w-64 space-y-1 bg-zinc-900 p-2 text-zinc-300"
         align="end"
@@ -134,15 +99,7 @@ const UserDropdownMenu = ({
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-zinc-800" />
-        <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center">
-              <Command className="mr-2 h-4 w-4" />
-              Command Menu
-            </div>
-            <span className="text-xs text-zinc-500">Ctrl K</span>
-          </div>
-        </DropdownMenuItem>
+
         <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
@@ -175,8 +132,11 @@ const UserDropdownMenu = ({
             Home Page
           </Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="bg-zinc-800" />
+
         <DropdownMenuItem
-          className="cursor-pointer px-2 py-1.5 text-red-400 focus:bg-zinc-800 focus:text-red-400"
+          className="cursor-pointer px-2 py-3 text-red-400 focus:bg-zinc-800 focus:text-red-400"
           onClick={handleLogout}
         >
           <div className="flex w-full items-center">
@@ -184,12 +144,6 @@ const UserDropdownMenu = ({
             Log Out
           </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-zinc-800" />
-        <div className="px-2 py-1.5">
-          <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700">
-            Upgrade to Pro
-          </Button>
-        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -37,7 +37,7 @@ const SettingsLayout = ({ children, pathname }: SettingsLayoutProps) => {
 
   return (
     <Container showItems={true}>
-      <div className="container mx-auto flex gap-8 p-6">
+      <div className="mx-auto flex gap-8 px-3 md:px-0">
         <aside className="w-64 space-y-6">
           <div>
             <h1 className="text-2xl font-semibold">Settings</h1>

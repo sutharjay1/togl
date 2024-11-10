@@ -1,29 +1,28 @@
 "use client";
 
-import Container from "@/app/(main)/_components/container";
-import JsonFormatter from "@/components/global/json-formatter";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
+import CreateTokenForm from "@/components/form/create-token";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Modal,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle,
+  ModalTrigger,
+} from "@/components/ui/modal";
+import { H3, P } from "@/components/ui/typography";
 import { useProject } from "@/hook/useProject";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
-import { TRPCClientError } from "@trpc/client";
-import { useEffect } from "react";
-import { toast } from "sonner";
+import { Loader2, Plus, ToggleRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
 export default function Tokens() {
   const { workspaceId } = useWorkspace();
   const { projectId } = useProject();
-  const { data, isLoading, refetch } = trpc.token.getTokens.useQuery(
+  const { data, isLoading } = trpc.token.getTokens.useQuery(
     {
       projectId,
       workspaceId,
@@ -34,138 +33,54 @@ export default function Tokens() {
     },
   );
 
-  const { mutateAsync, isSuccess } = useMutation({
-    mutationFn: async ({ tokenId }: { tokenId: string }) => {
-      try {
-        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/redis`, {
-          method: "PUT",
-          body: JSON.stringify({
-            flagId: tokenId,
-            projectId,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      } catch (e) {
-        if (e instanceof TRPCClientError) {
-          throw new Error(e.message);
-        } else {
-          console.error("Unexpected error:", e);
-        }
-      }
-    },
-    onSuccess: () => {
-      refetch();
-      toast.success(`Feature Updated`, {
-        description: "Your feature has been updated",
-        duration: 3000,
-        position: "bottom-left",
-        style: {
-          backgroundColor: "rgba(0, 255, 0, 0.2)",
-          borderColor: "rgba(0, 255, 0, 0.4)",
-          color: "white",
-        },
-        className: "border",
-      });
-    },
-    onError: (error: any) => {
-      toast.error(error.message, {
-        description: "Please try again",
-        duration: 3000,
-        position: "bottom-left",
-        style: {
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          borderColor: "rgba(255, 0, 0, 0.4)",
-          color: "white",
-        },
-        className: "border-[1px]",
-      });
-    },
-  });
+  const router = useRouter();
 
   useEffect(() => {
-    if (isSuccess) {
-      refetch();
-    }
-  }, [isSuccess, refetch]);
+    if (!data?.[0]?.id) return;
+    router.push(
+      `/dashboard/${workspaceId}/projects/${projectId}/tokens/${data?.[0]?.id}`,
+    );
+  }, [data, router, workspaceId, projectId]);
 
   return (
-    <Container showItems={true}>
-      <div className="mx-auto flex flex-col gap-4 px-2 py-6">
-        <div className="w-64 space-y-1">
-          <h1 className="text-2xl font-semibold">Tokens</h1>
-          <p className="text-sm text-muted-foreground">
-            View and manage project tokens
-          </p>
-        </div>
-        <main className="flex-1">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ProjectID</TableHead>
-                <TableHead>TokenID</TableHead>
-                <TableHead className="cursor-pointer">Rules</TableHead>
-                <TableHead>Enabled</TableHead>
-                <TableHead className="text-right">Created</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="h-24 text-center">
-                    <div className="flex items-center justify-center space-x-4">
-                      <Skeleton className="h-12 w-12 rounded-full" />
-                      <div className="flex flex-col space-y-2">
-                        <Skeleton className="h-4 w-96" />
-                        <Skeleton className="h-4 w-96" />
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : !data || data.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="h-24 text-center">
-                    No Tokens found.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                !isLoading &&
-                data &&
-                data.length > 0 &&
-                data?.map((token: any) => {
-                  return (
-                    <TableRow key={token.id}>
-                      <TableCell>{projectId}</TableCell>
-                      <TableCell>{token.id}</TableCell>
-                      <TableCell>
-                        <JsonFormatter jsonString={token.rules} />
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-4">
-                          <Switch
-                            checked={token.isEnabled}
-                            className="mr-2"
-                            onClick={() =>
-                              mutateAsync({
-                                tokenId: token.id,
-                              })
-                            }
-                          />
-                          {token.isEnabled ? "Enabled" : "Disabled"}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {new Date(token.createdAt).toLocaleDateString()}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
-            </TableBody>
-          </Table>
-        </main>
+    <Suspense fallback={<Loader2 className="animate-spin" />}>
+      <div className="mx-auto flex h-screen w-full flex-col items-center justify-start md:px-2">
+        {!data?.[0] && (
+          <Card className="w-full rounded-xl">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center justify-center px-6 py-3 text-center">
+                <div className="mb-4 rounded-full bg-primary/5 p-3 backdrop-blur-xl">
+                  <ToggleRight className="h-6 w-6 text-primary" />
+                </div>
+                <H3 className="">Start a New Token</H3>
+                <P className="mb-4 text-sm text-muted-foreground [&:not(:first-child)]:mt-1">
+                  You haven&apos;t created any tokens yet
+                </P>
+                <Modal>
+                  <ModalTrigger asChild className="mb-2">
+                    <Button variant="shine" className="h-9 py-1">
+                      <Plus className="mr-2 h-4 w-4" /> New Token
+                    </Button>
+                  </ModalTrigger>
+                  <ModalContent>
+                    <ModalHeader>
+                      <ModalTitle className="text-left">
+                        Create new project
+                      </ModalTitle>
+                      <ModalDescription className="text-left">
+                        Create a new project to get started
+                      </ModalDescription>
+                    </ModalHeader>
+
+                    <CreateTokenForm />
+                  </ModalContent>
+                </Modal>{" "}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        {isLoading ? <Loader2 className="animate-spin" /> : null}
       </div>
-    </Container>
+    </Suspense>
   );
 }

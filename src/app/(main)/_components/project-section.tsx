@@ -83,7 +83,7 @@ export default function ProjectSection() {
               <Skeleton className="h-6 w-32" />
               <Skeleton className="h-4 w-24" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <Skeleton className="h-4 w-40" />
             </CardContent>
           </Card>
@@ -95,8 +95,8 @@ export default function ProjectSection() {
   if (!projects?.length) {
     return (
       <Card className="rounded-xl">
-        <CardContent>
-          <div className="flex flex-col items-center justify-center bg-card p-6 text-center">
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center p-6 text-center">
             <div className="mb-4 rounded-full bg-primary/5 p-3 backdrop-blur-xl">
               <ToggleRight className="h-6 w-6 text-primary" />
             </div>
