@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";
 import { geistSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Component() {
@@ -77,18 +76,6 @@ export default function Component() {
               >
                 <Link href="/">Return home</Link>
               </Button>
-            </div>
-
-            <div className="absolute right-0 top-[65%] -translate-y-1/2">
-              <Image
-                src="/logo-light.svg"
-                alt="logo"
-                className={cn(
-                  "animate-float mx-auto hidden h-[400px] w-[400px] lg:flex",
-                )}
-                width={25}
-                height={25}
-              />
             </div>
           </main>
         </section>

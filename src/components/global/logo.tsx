@@ -28,7 +28,11 @@ const Logo = ({ text }: Props) => {
       >
         <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>
         <Image
-          src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
+          src={
+            theme === "light"
+              ? "https://res.cloudinary.com/sutharjay/image/upload/v1731225429/togl/togl-dark.svg"
+              : "https://res.cloudinary.com/sutharjay/image/upload/v1731225430/togl/togl-light.svg"
+          }
           alt="logo"
           className={cn("mx-auto")}
           width={25}

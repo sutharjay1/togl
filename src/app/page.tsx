@@ -81,7 +81,7 @@ export default function Home() {
                   asChild
                   variant="gooeyRight"
                 >
-                  <Link href="/signup">
+                  <Link href="/signin">
                     Start building free
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-1000 group-hover:translate-x-1" />
                   </Link>

@@ -32,7 +32,7 @@ const NavBar = () => {
       ref={mobileNavRef}
     >
       <nav className="my-4">
-        <div className="relative flex items-center justify-between rounded-2xl border border-primary/10 bg-background/80 p-3 backdrop-blur-md">
+        <div className="relative flex items-center justify-between rounded-2xl border border-primary/10 bg-background/80 p-3 backdrop-blur-md md:mx-2">
           <Logo />
           <div className="hidden items-center gap-1 md:flex">
             {NAV_ITEMS.map((item) => {
@@ -58,19 +58,21 @@ const NavBar = () => {
             {/* <div className="ml-2 h-6 w-px bg-primary/10" /> */}
             <div className="ml-2 flex flex-row space-x-3">
               <Button
-                className="w-full bg-transparent"
-                variant="gooeyLeft"
+                // className="w-full bg-transparent"
+                // variant="gooeyLeft"
+                className="w-full border border-input bg-transparent text-primary hover:text-primary"
                 asChild
+                variant="gooeyRight"
               >
                 <Link href="/signin">Sign In</Link>
               </Button>
-              <Button
+              {/* <Button
                 className="w-full border border-input bg-transparent text-primary hover:text-primary"
                 asChild
                 variant="gooeyRight"
               >
                 <Link href="/signup">Sign up</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="flex items-center gap-2 md:hidden">
@@ -107,7 +109,7 @@ const NavBar = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
-              className="absolute left-0 right-0 mx-4 mt-2 rounded-2xl border border-primary/10 bg-background/95 p-4 backdrop-blur-md md:mx-0 md:hidden"
+              className="absolute left-0 right-0 mx-2 mt-2 rounded-2xl border border-primary/10 bg-background/95 p-4 backdrop-blur-md md:mx-0 md:hidden"
             >
               <div className="flex flex-col gap-2">
                 {NAV_ITEMS.map((item) => {
