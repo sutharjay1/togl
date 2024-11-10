@@ -17,22 +17,30 @@ import { useWorkspace } from "@/hook/useWorkspace";
 import { trpc } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
+import React from "react";
 import { toast } from "sonner";
 
 type Props = {
-  params: {
+  params: Promise<{
     tokenId: string;
-  };
+  }>;
 };
 
 export default function TokenPage({ params }: Props) {
-  const { tokenId } = params;
+  const resolvedParams = React.use(params);
+  const { tokenId } = resolvedParams;
+
   const { workspaceId } = useWorkspace();
   const { projectId } = useProject();
-  const { data, isLoading } = trpc.token.getTokenById.useQuery({
-    tokenId,
-    workspaceId,
-  });
+  const { data, isLoading } = trpc.token.getTokenById.useQuery(
+    {
+      tokenId,
+      workspaceId,
+    },
+    {
+      enabled: !!workspaceId && !!tokenId && !!projectId,
+    },
+  );
 
   const { mutateAsync } = useMutation({
     mutationFn: async ({ tokenId }: { tokenId: string }) => {
