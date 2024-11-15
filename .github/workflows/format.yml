@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  prisma:
+  linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,10 +17,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "18"
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: Install Dependencies
         run: pnpm install
-      - name: Run Prisma Commands
-        run: pnpm prisma generate
       - name: Run Linter and Formatter
         run: |
           pnpm format
