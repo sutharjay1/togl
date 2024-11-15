@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import { z } from "zod";
 import { db } from "../../db";
 import { privateProcedure, publicProcedure, router } from "../trpc";
@@ -44,10 +44,13 @@ export const apiKeyRouter = router({
         }
         await verifyUserProjectAccess(userId!, projectId);
 
+        const rawApiKey = generateApiKey();
+        const hashedApiKey = await hashApiKey(rawApiKey);
+
         const apiKey = await db.apiKey.create({
           data: {
             name,
-            key: uuidv4(),
+            key: hashedApiKey,
             projectId,
             expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
           },
@@ -242,4 +245,21 @@ async function verifyUserWorkspaceAccess(userId: string, workspaceId: string) {
   }
 
   return !!userWorkspace;
+}
+
+function generateApiKey(): string {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+async function hashApiKey(apiKey: string): Promise<string> {
+  const prefix = "sk_";
+  const hash = crypto
+    .createHash("sha256")
+    .update(apiKey)
+    .digest("base64url")
+    .replaceAll("$", "")
+    .replaceAll(".", "")
+    .replaceAll("/", "");
+  const shortenedHash = hash.substring(0, 22);
+  return prefix + shortenedHash;
 }

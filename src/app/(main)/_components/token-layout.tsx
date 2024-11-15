@@ -29,15 +29,15 @@ const TokenLayout = ({ children }: TokenLayoutProps) => {
 
   return (
     <Container showItems={true}>
-      <div className="mx-auto flex gap-8 px-3 md:px-0">
-        <aside className="hidden w-64 space-y-6 md:block">
+      <div className="mx-auto flex gap-4 px-3 md:px-0">
+        <aside className="hidden w-56 space-y-6 md:block">
           <div>
             <h1 className="text-2xl font-semibold">Project</h1>
           </div>
-          <nav className="flex flex-col space-y-1">
+          <nav className="flex flex-col space-y-2">
             {isLoading && (
               <Card>
-                <CardContent className="pt-6">
+                <CardContent className="p-4 pt-4">
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-4 w-3/5" />
                   </div>
@@ -56,7 +56,7 @@ const TokenLayout = ({ children }: TokenLayoutProps) => {
                     className="block"
                   >
                     <Card className=" ">
-                      <CardContent className="flex items-center justify-center pt-6">
+                      <CardContent className="flex items-center justify-center p-4 pt-4">
                         <h2 className="text-base font-medium">{token.name}</h2>
                       </CardContent>
                     </Card>

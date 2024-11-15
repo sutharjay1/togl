@@ -278,6 +278,55 @@ export const tokenRouter = router({
         });
       }
     }),
+  toggle: privateProcedure
+    .input(
+      z.object({
+        tokenId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { tokenId } = input;
+      const { session } = ctx;
+
+      try {
+        const userId = session?.user.id;
+        if (!userId) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in",
+          });
+        }
+
+        const featureState = await db.token.findUnique({
+          where: { id: tokenId },
+        });
+
+        if (!featureState) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Token not found",
+          });
+        }
+
+        await db.token.update({
+          where: { id: tokenId },
+          data: {
+            isEnabled: !featureState.isEnabled,
+          },
+        });
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "An error occurred while deleting token.",
+        });
+      }
+    }),
 });
 
 async function verifyUserWorkspaceAccess(userId: string, workspaceId: string) {
