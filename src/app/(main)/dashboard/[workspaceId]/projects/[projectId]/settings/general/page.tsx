@@ -193,38 +193,6 @@ const ProjectSettings = () => {
       <Separator className="my-4" />
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">General</h2>
-        {/* <div className="space-y-4">
-          {isLoading ? (
-            <Skeleton className="h-8 w-full" />
-          ) : (
-            <div className="space-y-2">
-              <Label htmlFor="project-name">Project name</Label>
-              <Input
-                id="project-name"
-                value={data?.name}
-                // onChange={(e) => setProjectName(e.target.value)}
-              />
-              <p className="text-sm text-muted-foreground">
-                Your project will be available as {data?.name}.
-              </p>
-            </div>
-          )}
-          {isLoading ? (
-            <Skeleton className="h-24 w-full" />
-          ) : (
-            <div className="space-y-2">
-              <Label htmlFor="project-description">Project description</Label>
-              <Textarea
-                id="project-description"
-                placeholder="e.g. Acme UI"
-                value={data?.description || ""}
-                // onChange={(e) => setProjectDescription(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-          )}
-          <Button>Update</Button>
-        </div> */}
 
         <Form {...form}>
           <form

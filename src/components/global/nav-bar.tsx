@@ -54,25 +54,15 @@ const NavBar = () => {
               );
             })}
             <div className="ml-2 h-6 w-px bg-primary/10" />
-            {/* <ToggleTheme className="ml-2" /> */}
-            {/* <div className="ml-2 h-6 w-px bg-primary/10" /> */}
+
             <div className="ml-2 flex flex-row space-x-3">
               <Button
-                // className="w-full bg-transparent"
-                // variant="gooeyLeft"
                 className="w-full border border-input bg-transparent text-primary hover:text-primary"
                 asChild
                 variant="gooeyRight"
               >
                 <Link href="/signin">Sign In</Link>
               </Button>
-              {/* <Button
-                className="w-full border border-input bg-transparent text-primary hover:text-primary"
-                asChild
-                variant="gooeyRight"
-              >
-                <Link href="/signup">Sign up</Link>
-              </Button> */}
             </div>
           </div>
           <div className="flex items-center gap-2 md:hidden">

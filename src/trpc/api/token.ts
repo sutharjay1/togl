@@ -49,8 +49,6 @@ export const tokenRouter = router({
           });
         }
 
-        // await verifyUserWorkspaceAccess(userId, projectId);
-
         const result = await db.token.create({
           data: {
             name,

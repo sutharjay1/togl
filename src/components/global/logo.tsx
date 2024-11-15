@@ -23,7 +23,6 @@ const Logo = ({ text }: Props) => {
       <div
         className={cn(
           "relative flex h-8 w-fit items-center justify-center rounded-md",
-          // 'bg-primary/10'
         )}
       >
         <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>

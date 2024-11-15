@@ -17,7 +17,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "border-text/15 border",
           "focus:ring-3 focus:border-2 focus:border-ring/15 focus:ring-accent",
 
-          // "dark:bg-neutral-900/75 dark:text-text",
           "dark:placeholder:text-textSecondary/80",
           "focus:border focus:dark:border-2 focus:dark:border-ring focus:dark:ring-accent",
           "dark:focus:ring-3 dark:focus:border-neutral-900/75 dark:focus:ring-accent",
