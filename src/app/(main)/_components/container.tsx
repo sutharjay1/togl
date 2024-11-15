@@ -114,9 +114,16 @@ const Container = ({ children, showItems = false }: Props) => {
           ) : (
             <Modal>
               <ModalTrigger asChild className="mb-2">
-                <Button variant="shine" className="h-9 py-1">
-                  <Plus className="mr-2 h-4 w-4" /> New Token
-                </Button>
+                {false ? (
+                  <Button variant="shine" className="h-9 py-1">
+                    <Plus className="mr-2 h-4 w-4" /> New Token
+                  </Button>
+                ) : (
+                  <Button variant="shine" className="h-9 py-1">
+                    <Plus className="mr-0 h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">New Token</span>
+                  </Button>
+                )}
               </ModalTrigger>
               <ModalContent>
                 <ModalHeader>

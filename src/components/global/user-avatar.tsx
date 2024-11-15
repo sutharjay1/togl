@@ -9,9 +9,8 @@ import {
 import { useUser } from "@/hook/useUser";
 import { useWorkspace } from "@/hook/useWorkspace";
 import { cn } from "@/lib/utils";
-import { Home, LogOut, Monitor, Moon, Plus, Settings, Sun } from "lucide-react";
+import { LogOut, Monitor, Plus, Settings } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { P } from "../ui/typography";
@@ -25,7 +24,7 @@ const UserDropdownMenu = ({
   variant?: "gooeyRight" | "gooeyLeft";
 }) => {
   const { user } = useUser();
-  const { setTheme } = useTheme();
+
   const { workspaceId, setWorkspaceId } = useWorkspace();
   const handleLogout = () => {
     signOut({
@@ -48,7 +47,7 @@ const UserDropdownMenu = ({
             {user?.image ? (
               <AvatarImage src={user?.image} />
             ) : (
-              <AvatarFallback className="bg-gradient-to-tl from-[#2BC0E4] to-[#EAECC6] text-zinc-900">
+              <AvatarFallback className="bg-gradient-to-tl from-[#2BC0E4] to-[#EAECC6] text-zinc-400">
                 {user?.name ? user?.name[0].toUpperCase() : "?"}
               </AvatarFallback>
             )}
@@ -56,7 +55,7 @@ const UserDropdownMenu = ({
 
           <Hint label={`Hello, ${user?.name}`} side="bottom">
             <div className="hidden min-w-0 flex-1 md:flex">
-              <P className="truncate text-sm font-medium leading-none text-slate-900 dark:text-slate-200">
+              <P className="truncate text-sm font-medium leading-none text-slate-200">
                 {user?.email ?? "No Email"}
               </P>
             </div>
@@ -69,9 +68,7 @@ const UserDropdownMenu = ({
         align="end"
       >
         <div className="mb-2 px-2 py-1.5">
-          <P className="text-sm font-medium leading-none text-accent">
-            {user?.name}
-          </P>
+          <P className="text-sm font-medium leading-none">{user?.name}</P>
           <P className="text-sm leading-none text-muted-foreground [&:not(:first-child)]:mt-2">
             {user?.email}
           </P>
@@ -97,40 +94,6 @@ const UserDropdownMenu = ({
             <Plus className="mr-2 h-4 w-4" />
             Create Team
           </div>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-zinc-800" />
-
-        <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center">
-              <Sun className="mr-2 h-4 w-4" />
-              Theme
-            </div>
-            <div className="flex space-x-1">
-              <Button
-                onClick={() => setTheme("light")}
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-              >
-                <Monitor className="h-4 w-4" />
-              </Button>
-              <Button
-                onClick={() => setTheme("dark")}
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-              >
-                <Moon className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
-          <Link href="/home" className="flex w-full items-center">
-            <Home className="mr-2 h-4 w-4" />
-            Home Page
-          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="bg-zinc-800" />

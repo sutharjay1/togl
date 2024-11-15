@@ -121,7 +121,7 @@ export function P({
   return (
     <p
       className={cn(
-        "leading-7 text-zinc-900 dark:text-zinc-400 [&:not(:first-child)]:mt-4",
+        "leading-7 text-zinc-400 [&:not(:first-child)]:mt-4",
         inter.className,
         className,
       )}

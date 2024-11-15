@@ -47,7 +47,7 @@ export default function Home() {
                 height: `${Math.random() * 40 + 20}px`,
               }}
             >
-              <div className="h-full w-full rotate-[25deg] rounded-sm bg-gray-800/10 dark:bg-gray-800/20" />
+              <div className="h-full w-full rotate-[25deg] rounded-sm bg-gray-800/10 dark:bg-gray-800/5" />
             </div>
           ))}
         </div>

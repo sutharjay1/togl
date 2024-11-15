@@ -1,27 +1,11 @@
-"use client";
-
-import { P } from "@/components/ui/typography";
-import { useWorkspace } from "@/hook/useWorkspace";
+import { H1, P } from "@/components/ui/typography";
 import { geistSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-
 import NextTopLoader from "nextjs-toploader";
+import React from "react";
 import Header from "../_components/header";
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname();
 
-  const { setWorkspaceId } = useWorkspace();
-
-  useEffect(() => {
-    setWorkspaceId(pathname?.split("/")[2]);
-  }, [pathname, setWorkspaceId]);
-
+const Settings = () => {
   return (
     <>
       <NextTopLoader
@@ -35,7 +19,7 @@ export default function DashboardLayout({
         speed={200}
         shadow="0 0 10px #EEEEEC65,0 0 5px #EEEEEC65"
         template='<div class="bar" role="bar"><div class="peg"></div></div> 
-  <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+<div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
         zIndex={1600}
         showAtBottom={false}
       />
@@ -52,7 +36,13 @@ export default function DashboardLayout({
         <section className={cn("relative flex h-full flex-1 flex-col")}>
           <Header />
 
-          {children}
+          <div className="mt-24 flex-1 overflow-hidden">
+            <div className="mx-auto max-w-5xl px-4">
+              <div className="flex items-center justify-between border-b">
+                <H1 className="text-4xl font-bold">Settings</H1>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
       <footer className="h-fit w-full border-t border-border/40 bg-card p-4 text-center text-sm text-muted-foreground">
@@ -60,4 +50,6 @@ export default function DashboardLayout({
       </footer>
     </>
   );
-}
+};
+
+export default Settings;

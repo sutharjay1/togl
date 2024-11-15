@@ -45,7 +45,7 @@ export default function Tokens() {
   return (
     <Suspense fallback={<Loader2 className="animate-spin" />}>
       <div className="mx-auto flex h-screen w-full flex-col items-center justify-start md:px-2">
-        {!data?.[0] && (
+        {!data?.[0] && !isLoading && (
           <Card className="w-full rounded-xl">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center justify-center px-6 py-3 text-center">
@@ -79,7 +79,13 @@ export default function Tokens() {
             </CardContent>
           </Card>
         )}
-        {isLoading ? <Loader2 className="animate-spin" /> : null}
+        {isLoading ? (
+          <Card className="w-full rounded-xl">
+            <CardContent className="pt-6">
+              <Loader2 className="animate-spin" />
+            </CardContent>
+          </Card>
+        ) : null}
       </div>
     </Suspense>
   );

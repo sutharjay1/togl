@@ -1,5 +1,4 @@
 import { geistSans } from "@/lib/fonts";
-import { ThemeProvider } from "@/providers/theme-provider";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -47,16 +46,9 @@ export default async function RootLayout({
           <TRPCProvider>
             <TooltipProvider>
               <QueryProvider>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="dark"
-                  enableSystem
-                  disableTransitionOnChange
-                >
-                  <Toaster />
+                <Toaster />
 
-                  {children}
-                </ThemeProvider>
+                {children}
               </QueryProvider>
             </TooltipProvider>
           </TRPCProvider>
