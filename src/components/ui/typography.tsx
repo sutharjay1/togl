@@ -1,4 +1,4 @@
-import { inter } from "@/lib/fonts";
+import { inter } from "@/features/font";
 import { cn } from "@/lib/utils";
 
 export function BlockQuote({ children }: { children: React.ReactNode }) {

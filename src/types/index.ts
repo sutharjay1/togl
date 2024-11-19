@@ -5,7 +5,7 @@ export const TUserSchema = z.object({
   email: z.string().email(),
   name: z.string(),
   image: z.string(),
-  workspaceId: z.string(),
+  projectId: z.string(),
 });
 
 export type TUser = z.infer<typeof TUserSchema>;

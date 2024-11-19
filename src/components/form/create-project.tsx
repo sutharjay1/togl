@@ -14,22 +14,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-
-import { useWorkspace } from "@/hook/useWorkspace";
+import { generateSlug } from "random-word-slugs";
 import { trpc } from "@/trpc/client";
 import { TRPCClientError } from "@trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { createProjectSchema as ProjectSchema } from "@/trpc/api/project";
+import { useProject } from "@/features/project/hooks/useProject";
 
-const ProjectSchema = z.object({
-  name: z.string().min(1, "Project name is required"),
-  description: z.string().optional(),
-  workspaceId: z.string(),
-});
-
-const CreateProjectForm = () => {
+const CreateProjectForm = ({
+  setIsUpdated,
+}: {
+  setIsUpdated: (value: boolean) => void;
+}) => {
   const router = useRouter();
-  const { workspaceId } = useWorkspace();
+  const { setProjectId } = useProject();
 
   const { mutateAsync: createProject, isLoading: pending } =
     trpc.project.create.useMutation({
@@ -47,7 +46,10 @@ const CreateProjectForm = () => {
             className: "border",
           });
 
-          router.push(`/dashboard/${workspaceId}/projects`);
+          setIsUpdated(true);
+          setProjectId(data.id);
+
+          router.push(`/projects/${data.id}/flags`);
         }
       },
     });
@@ -59,12 +61,12 @@ const CreateProjectForm = () => {
     });
 
     try {
-      await createProject({ name, workspaceId, description: "" });
+      await createProject({ name, description: "" });
     } catch (error) {
       if (error instanceof TRPCClientError) {
         toast.error(error.message, {
           description:
-            error.message === "Project already exists in this workspace"
+            error.message === "Project already exists in this account"
               ? "Change the project name and try again."
               : "Please try again",
           duration: 3000,
@@ -98,9 +100,8 @@ const CreateProjectForm = () => {
     mode: "onChange",
     resolver: zodResolver(ProjectSchema),
     defaultValues: {
-      name: "",
+      name: generateSlug(2),
       description: "",
-      workspaceId,
     },
   });
 
@@ -112,7 +113,7 @@ const CreateProjectForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col gap-6"
+        className="z-50 flex flex-col gap-6"
       >
         <FormField
           control={form.control}

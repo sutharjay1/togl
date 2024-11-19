@@ -2,13 +2,13 @@ import Logo from "@/components/global/logo";
 
 import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";
-import { geistSans } from "@/lib/fonts";
+import ContinueWithGithub from "@/features/auth/continue-with-github";
+import ContinueWithGoogle from "@/features/auth/continue-with-google";
+import { geistSans } from "@/features/font";
 import { cn } from "@/lib/utils";
 import { Mail } from "lucide-react";
 
 import Link from "next/link";
-import ContinueWithGithub from "./_components/continue-with-github";
-import ContinueWithGoogle from "./_components/continue-with-google";
 
 const SignIn = () => {
   return (
@@ -72,15 +72,15 @@ const SignIn = () => {
 
             <div className="flex justify-center">
               <P className="w-full text-center text-sm text-muted-foreground [&:not(:first-child)]:mt-0">
-                By continuing, you agree to our{" "}
+                By continuing, you agree to our
                 <Button
                   asChild
                   variant="link"
                   className="h-auto p-0 text-sm font-normal"
                 >
                   <Link href="#">Terms</Link>
-                </Button>{" "}
-                and{" "}
+                </Button>
+                and
                 <Button
                   asChild
                   variant="link"

@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: togl-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: togldb
+    ports:
+      - "5433:5432" # Changed the host port to 5433
+    volumes:
+      - togl-db:/var/lib/postgresql/data
+
+volumes:
+  togl-db:

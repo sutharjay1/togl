@@ -24,18 +24,18 @@ export const authOptions: AuthOptions = {
         const dbUser = await db.user.findUnique({
           where: { email: session.user.email },
           include: {
-            workspace: {
-              include: {
-                workspace: true,
-              },
-            },
+            projects: true,
           },
         });
 
         if (dbUser && session.user) {
           session.user.id = dbUser.id;
 
-          session.user.workspaceId = dbUser.workspace[0]?.workspaceId;
+          console.log({
+            dbUser,
+          });
+
+          session.user.projectId = dbUser.projects[0]?.id;
         }
       }
       return session;
@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
       });
 
       try {
-        const dbUser = await db.user.findFirst({
+        const dbUser = await db.user.findUnique({
           where: { email: user.email },
         });
 
@@ -63,13 +63,12 @@ export const authOptions: AuthOptions = {
             },
           });
 
-          await db.workspace.create({
+          await db.project.create({
             data: {
-              name: "My Workspace",
-              members: {
-                create: {
-                  userId: newUser.id,
-                  role: "OWNER",
+              name: "My Project",
+              users: {
+                connect: {
+                  id: newUser.id,
                 },
               },
             },

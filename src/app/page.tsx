@@ -1,7 +1,7 @@
 import NavBar from "@/components/global/nav-bar";
 import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";
-import { geistSans } from "@/lib/fonts";
+import { geistSans } from "@/features/font";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -59,7 +59,7 @@ export default function Home() {
           <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center px-4">
             <div className="mx-auto max-w-3xl text-center">
               <H1 className="mb-6 font-inter text-4xl font-bold tracking-tight sm:text-6xl lg:text-6xl">
-                Unleash features{" "}
+                Unleash features
                 <span className="bg-gradient-to-br from-primary to-primary-foreground bg-clip-text text-transparent">
                   with confidence
                 </span>

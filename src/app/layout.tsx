@@ -1,4 +1,4 @@
-import { geistSans } from "@/lib/fonts";
+import { geistSans } from "@/features/font";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { Toaster } from "sonner";
 import { authOptions } from "./api/auth/[...nextauth]/auth";
 import "./globals.css";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 export const metadata: Metadata = {
   title: "Togl - Feature Management for Scalable Growth",
@@ -46,9 +47,16 @@ export default async function RootLayout({
           <TRPCProvider>
             <TooltipProvider>
               <QueryProvider>
-                <Toaster />
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="dark"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <Toaster />
 
-                {children}
+                  {children}
+                </ThemeProvider>
               </QueryProvider>
             </TooltipProvider>
           </TRPCProvider>
