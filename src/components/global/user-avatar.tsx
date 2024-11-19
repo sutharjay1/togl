@@ -6,15 +6,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUser } from "@/hook/useUser";
-import { useWorkspace } from "@/hook/useWorkspace";
+import { useUser } from "@/hooks/useUser";
+
 import { cn } from "@/lib/utils";
-import { LogOut, Monitor, Plus, Settings } from "lucide-react";
+import { LogOut, Monitor, Moon, Plus, Settings, Sun } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { P } from "../ui/typography";
 import Hint from "./hint";
+import { useTheme } from "next-themes";
 
 const UserDropdownMenu = ({
   className,
@@ -24,13 +25,11 @@ const UserDropdownMenu = ({
   variant?: "gooeyRight" | "gooeyLeft";
 }) => {
   const { user } = useUser();
-
-  const { workspaceId, setWorkspaceId } = useWorkspace();
+  const { setTheme } = useTheme();
   const handleLogout = () => {
     signOut({
       callbackUrl: "/",
     });
-    setWorkspaceId("");
   };
 
   return (
@@ -75,10 +74,7 @@ const UserDropdownMenu = ({
         </div>
         <DropdownMenuSeparator className="bg-zinc-800" />
         <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
-          <Link
-            href={`/dashboard/${workspaceId}/projects`}
-            className="flex w-full items-center"
-          >
+          <Link href={`/projects/flags`} className="flex w-full items-center">
             <Monitor className="mr-2 h-4 w-4" />
             Dashboard
           </Link>
@@ -97,7 +93,33 @@ const UserDropdownMenu = ({
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="bg-zinc-800" />
-
+        <DropdownMenuItem className="px-2 py-1.5 focus:bg-zinc-800 focus:text-white">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center">
+              <Sun className="mr-2 h-4 w-4" />
+              Theme
+            </div>
+            <div className="flex space-x-1">
+              <Button
+                onClick={() => setTheme("light")}
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+              >
+                <Monitor className="h-4 w-4" />
+              </Button>
+              <Button
+                onClick={() => setTheme("dark")}
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+              >
+                <Moon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-zinc-800" />
         <DropdownMenuItem
           className="cursor-pointer px-2 py-3 text-red-400 focus:bg-zinc-800 focus:text-red-400"
           onClick={handleLogout}

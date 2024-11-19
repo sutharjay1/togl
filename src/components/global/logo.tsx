@@ -1,7 +1,7 @@
 "use client";
 
-import { useUser } from "@/hook/useUser";
-import { useWorkspace } from "@/hook/useWorkspace";
+import { useUser } from "@/hooks/useUser";
+
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -13,11 +13,11 @@ type Props = {
 
 const Logo = ({ text }: Props) => {
   const { user } = useUser();
-  const { workspaceId } = useWorkspace();
+
   const { theme } = useTheme();
   return (
     <Link
-      href={user ? `/dashboard/${workspaceId}/projects` : "/"}
+      href={user ? `/projects/flags` : "/"}
       className="relative flex items-center"
     >
       <div

@@ -42,7 +42,6 @@ export const apiKeyRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserProjectAccess(userId!, projectId);
 
         const rawApiKey = generateApiKey();
         const hashedApiKey = await hashApiKey(rawApiKey);
@@ -57,13 +56,9 @@ export const apiKeyRouter = router({
           include: {
             project: {
               include: {
-                workspace: {
-                  include: {
-                    members: true,
-                    projects: true,
-                    _count: true,
-                  },
-                },
+                users: true,
+                token: true,
+                _count: true,
               },
             },
           },
@@ -104,7 +99,6 @@ export const apiKeyRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserProjectAccess(userId!, projectId);
 
         const user = await db.user.findUnique({ where: { id: userId } });
         const apiKeys = await db.apiKey.findMany({
@@ -133,11 +127,10 @@ export const apiKeyRouter = router({
   getAPIKeyById: privateProcedure
     .input(getAPIKeyByIdSchema)
     .query(async ({ input, ctx }) => {
-      const { projectId, apiKeyId } = input;
+      const { apiKeyId } = input;
 
       try {
         const userId = ctx.session?.user.id;
-        await verifyUserProjectAccess(userId!, projectId);
 
         const apiKey = await db.apiKey.findUnique({
           where: { id: apiKeyId },
@@ -168,12 +161,10 @@ export const apiKeyRouter = router({
 
   deleteAPIKey: privateProcedure
     .input(deleteAPIKeySchema)
-    .mutation(async ({ input, ctx }) => {
-      const { projectId, apiKeyId } = input;
+    .mutation(async ({ input }) => {
+      const { apiKeyId } = input;
 
       try {
-        const userId = ctx.session?.user.id;
-        await verifyUserProjectAccess(userId!, projectId);
         await db.apiKey.delete({ where: { id: apiKeyId } });
 
         return;
@@ -205,47 +196,6 @@ export const apiKeyRouter = router({
       throw new Error("Invalid or expired API key");
     }),
 });
-
-async function verifyUserProjectAccess(userId: string, projectId: string) {
-  const project = await db.project.findUnique({
-    where: { id: projectId },
-    include: { workspace: true },
-  });
-
-  if (
-    !project ||
-    !(await verifyUserWorkspaceAccess(userId, project.workspaceId))
-  ) {
-    throw new Error("User does not have access to this project");
-  }
-}
-
-async function verifyUserWorkspaceAccess(userId: string, workspaceId: string) {
-  if (!workspaceId) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Workspace ID is missing",
-    });
-  }
-
-  const userWorkspace = await db.userWorkspace.findUnique({
-    where: {
-      userId_workspaceId: {
-        userId,
-        workspaceId,
-      },
-    },
-  });
-
-  if (!userWorkspace) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "User does not have access to this workspace",
-    });
-  }
-
-  return !!userWorkspace;
-}
 
 function generateApiKey(): string {
   return crypto.randomBytes(32).toString("hex");

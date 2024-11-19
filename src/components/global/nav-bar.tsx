@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useOnClickOutside } from "@/hook/useClickOutside";
+import { useOnClickOutside } from "@/hooks/useClickOutside";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
