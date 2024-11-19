@@ -13,7 +13,7 @@ import Container from "@/features/project/container";
 import { trpc } from "@/trpc/client";
 
 export default function Members() {
-  const { data, isLoading } = trpc.project.getProjects.useQuery({});
+  const { data, isLoading } = trpc.project.getProjects.useQuery();
 
   return (
     <Container showItems={true}>

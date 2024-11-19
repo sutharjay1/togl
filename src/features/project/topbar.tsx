@@ -3,7 +3,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useUser } from "@/hooks/useUser";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import CreateFlag from "../flags/components/create-flag";
 import CreateProject from "./create-project";
 import { ProjectSettingButton } from "./project-setting-button";
@@ -34,6 +34,9 @@ const TopBar = () => {
   const greeting = useMemo(() => getTimeGreeting(), []);
   const date = useMemo(() => formatDate(), []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isUpdated, setIsUpdated] = useState(false);
+
   return (
     <div className="my-2 flex items-center border-b border-zinc-800 px-4 pb-2">
       <SidebarTrigger className="left-4 top-4 mr-4" />
@@ -50,9 +53,11 @@ const TopBar = () => {
           <ProjectSettingButton />
 
           {(pathname === "/projects" || pathname === "/dashboard") && (
-            <CreateProject show={false} />
+            <CreateProject show={false} setIsUpdated={setIsUpdated} />
           )}
-          {pathname !== "/dashboard" && <CreateFlag show={false} />}
+          {pathname !== "/dashboard" && (
+            <CreateFlag show={false} setIsUpdated={setIsUpdated} />
+          )}
         </div>
       </div>
     </div>

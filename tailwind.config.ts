@@ -1,9 +1,7 @@
+import svgToDataUri from "mini-svg-data-uri";
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import svgToDataUri from "mini-svg-data-uri";
-import defaultTheme from "tailwindcss/defaultTheme";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
-import colors from "tailwindcss/colors";
 
 const config = {
   darkMode: ["class"],
@@ -16,7 +14,7 @@ const config = {
   prefix: "",
   theme: {
     container: {
-      center: "true",
+      center: true,
       padding: "2rem",
       screens: {
         "2xl": "1400px",
