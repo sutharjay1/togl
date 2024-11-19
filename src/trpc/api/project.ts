@@ -84,11 +84,10 @@ export const projectRouter = router({
 
       const projects = await db.project.findMany({
         where: {
-          id: session.user.projectId,
+          users: { some: { id: userId } },
         },
         include: {
           token: true,
-          _count: true,
           users: true,
         },
       });

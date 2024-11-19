@@ -20,6 +20,7 @@ import { TRPCClientError } from "@trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createProjectSchema as ProjectSchema } from "@/trpc/api/project";
+import { useProject } from "@/features/project/hooks/useProject";
 
 const CreateProjectForm = ({
   setIsUpdated,
@@ -27,6 +28,7 @@ const CreateProjectForm = ({
   setIsUpdated: (value: boolean) => void;
 }) => {
   const router = useRouter();
+  const { setProjectId } = useProject();
 
   const { mutateAsync: createProject, isLoading: pending } =
     trpc.project.create.useMutation({
@@ -45,8 +47,9 @@ const CreateProjectForm = ({
           });
 
           setIsUpdated(true);
+          setProjectId(data.id);
 
-          router.push(`/projects/flags`);
+          router.push(`/projects/${data.id}/flags`);
         }
       },
     });
@@ -63,7 +66,7 @@ const CreateProjectForm = ({
       if (error instanceof TRPCClientError) {
         toast.error(error.message, {
           description:
-            error.message === "Project already exists in this workspace"
+            error.message === "Project already exists in this account"
               ? "Change the project name and try again."
               : "Please try again",
           duration: 3000,

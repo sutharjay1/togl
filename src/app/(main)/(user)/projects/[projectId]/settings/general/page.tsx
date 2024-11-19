@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { H4, P } from "@/components/ui/typography";
 import CreateAPIKey from "@/features/apiKey/create-api";
-import { useUser } from "@/hooks/useUser";
+import { useProject } from "@/features/project/hooks/useProject";
 import { updateProjectSchema } from "@/trpc/api/project";
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,11 +36,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const ProjectSettings = () => {
-  const { user } = useUser();
+  const { projectId } = useProject();
   const router = useRouter();
 
   const { data, isFetching } = trpc.project.getProjectById.useQuery({
-    projectId: user.projectId,
+    projectId: projectId,
   });
 
   const { mutateAsync: updateProject, isLoading: isUpdating } =
@@ -111,7 +111,7 @@ const ProjectSettings = () => {
       name: "",
       description: "",
 
-      projectId: user.projectId,
+      projectId: projectId,
     },
   });
 
@@ -152,14 +152,14 @@ const ProjectSettings = () => {
     });
 
   const handleDeleteProject = async () => {
-    await deleteProject({ projectId: user.projectId }).then(() => {
+    await deleteProject({ projectId: projectId }).then(() => {
       router.push(`/projects`);
     });
   };
 
   const { data: apiKeys, isLoading: apiKeysLoading } =
     trpc.apiKey.getAPIKeys.useQuery({
-      projectId: user.projectId,
+      projectId: projectId,
     });
 
   return (

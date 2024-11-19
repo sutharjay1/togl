@@ -4,14 +4,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { H3, H4, P } from "@/components/ui/typography";
 import CreateFlag from "@/features/flags/components/create-flag";
-import { useProject } from "@/features/project/hooks/useProject";
 import { trpc } from "@/trpc/client";
 import { ToggleRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const FlagRoot = () => {
-  const { projectId } = useProject();
+  const pathname = usePathname();
+
   const [isUpdated, setIsUpdated] = useState(false);
 
   const {
@@ -20,7 +21,7 @@ const FlagRoot = () => {
     refetch,
   } = trpc.token.getTokens.useQuery(
     {
-      projectId,
+      projectId: pathname.split("/")[2],
     },
     {
       refetchIntervalInBackground: true,
@@ -46,9 +47,9 @@ const FlagRoot = () => {
                 <div className="mb-4 rounded-full bg-primary/5 p-3 backdrop-blur-xl">
                   <ToggleRight className="h-6 w-6 text-primary" />
                 </div>
-                <H3 className="">Start a New Token</H3>
+                <H3 className="">Start a New Flag</H3>
                 <P className="mb-4 text-sm text-muted-foreground [&:not(:first-child)]:mt-1">
-                  Create a new token to get started
+                  Create a new flag to get started
                 </P>
                 <CreateFlag show setIsUpdated={setIsUpdated} />
               </div>
@@ -56,7 +57,10 @@ const FlagRoot = () => {
           </Card>
         ) : (
           flags?.map((flag: any) => (
-            <Link key={flag.id} href={`/projects/flags/${flag.id}`}>
+            <Link
+              key={flag.id}
+              href={`/projects/${flag.projectId}/flags/${flag.id}`}
+            >
               <Card
                 key={flag.id}
                 className="h-40 flex-1 cursor-pointer border-border/25 bg-zinc-900/90 hover:border-[1px] hover:border-border/90"

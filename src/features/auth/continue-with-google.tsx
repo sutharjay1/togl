@@ -20,7 +20,7 @@ const ContinueWithGoogle = () => {
   useEffect(() => {
     if (user) {
       router.push("/projects/flags");
-      console.log(user.projectId);
+
       setProjectId(user.projectId);
     }
   }, [user, router]);

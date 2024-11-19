@@ -91,19 +91,21 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           ) : (
-            projects?.map((flag: any) => (
+            projects?.map((project: any) => (
               <Link
-                key={flag.id}
-                href={`/projects/flags/${flag.id}`}
+                key={project.id}
+                href={`/projects/${project.id}/flags`}
                 className="block"
               >
                 <Card
-                  key={flag.id}
+                  key={project.id}
                   className="h-40 flex-1 cursor-pointer border-border/25 bg-zinc-900/90 hover:border-[1px] hover:border-border/90"
                 >
                   <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                     <div className="space-y-1">
-                      <H4 className="font-medium leading-none">{flag.name}</H4>
+                      <H4 className="font-medium leading-none">
+                        {project.name}
+                      </H4>
                       <P className="text-sm text-muted-foreground [&:not(:first-child)]:mt-0">
                         No tokens
                       </P>
@@ -130,7 +132,7 @@ const Dashboard = () => {
                         <Button
                           variant="ghost"
                           className="w-full text-left text-sm text-destructive hover:bg-destructive/25 hover:text-destructive"
-                          onClick={() => handleDeleteProject(flag.id)}
+                          onClick={() => handleDeleteProject(project.id)}
                         >
                           {deleteLoading ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

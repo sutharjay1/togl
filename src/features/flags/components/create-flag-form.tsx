@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useProject } from "@/features/project/hooks/useProject";
 import { trpc } from "@/trpc/client";
 import { generateSlug } from "random-word-slugs";
 import { toast } from "sonner";
@@ -34,7 +34,7 @@ const tokenSchema = z.object({
   description: z.string().optional(),
   isEnabled: z.boolean().default(false),
   rules: z.string().optional(),
-  projectId: z.array(z.object({ id: z.string(), name: z.string() })),
+  projectId: z.object({ id: z.string(), name: z.string() }),
 });
 
 type TokenFormValues = z.infer<typeof tokenSchema>;
@@ -44,6 +44,8 @@ const CreateTokenForm = ({
 }: {
   setIsUpdated: (value: boolean) => void;
 }) => {
+  const { projectId } = useProject();
+
   const { data: projects, isLoading: isLoadingProjects } =
     trpc.project.getProjects.useQuery();
 
@@ -79,18 +81,20 @@ const CreateTokenForm = ({
     },
   });
 
+  const filteredProject = projects?.filter(
+    (project) => project.id === projectId,
+  )[0];
+  const projectIdAndName = filteredProject
+    ? { id: filteredProject.id, name: filteredProject.name }
+    : null;
+
   const form = useForm<TokenFormValues>({
     resolver: zodResolver(tokenSchema),
     defaultValues: {
       name: generateSlug(2),
       isEnabled: false,
       rules: "",
-      projectId: projects?.map((project) => {
-        return {
-          id: project.id,
-          name: project.name,
-        };
-      }),
+      projectId: projectIdAndName!,
     },
   });
 
@@ -100,7 +104,7 @@ const CreateTokenForm = ({
       description: data.description ? data.description : "",
       isEnabled: data.isEnabled,
       rules: data.rules,
-      projectId: data.projectId[0].id,
+      projectId: data.projectId.id,
     });
   };
 
@@ -184,14 +188,14 @@ const CreateTokenForm = ({
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value[0]?.id}
+                  defaultValue={field.value.id}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a project" />
                   </SelectTrigger>
                   <SelectContent>
                     {isLoadingProjects && <span>Loading...</span>}
-                    {projects?.map((project) => (
+                    {projects?.map((project: any) => (
                       <SelectItem key={project.id} value={project.id}>
                         {project.name}
                       </SelectItem>

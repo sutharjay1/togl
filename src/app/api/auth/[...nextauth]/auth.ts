@@ -24,10 +24,7 @@ export const authOptions: AuthOptions = {
         const dbUser = await db.user.findUnique({
           where: { email: session.user.email },
           include: {
-            projects: {
-              take: 1,
-              orderBy: { createdAt: "desc" },
-            },
+            projects: true,
           },
         });
 
@@ -39,9 +36,6 @@ export const authOptions: AuthOptions = {
           });
 
           session.user.projectId = dbUser.projects[0]?.id;
-          console.log({
-            session,
-          });
         }
       }
       return session;
