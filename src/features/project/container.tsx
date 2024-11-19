@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import CreateProject from "./create-project";
 
 export type ProjectItems = {
@@ -48,6 +48,9 @@ const Container = ({ children, showItems = false }: Props) => {
       path: `/projects/flags/${projectId}/settings/general`,
     },
   ];
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isUpdated, setIsUpdated] = useState(false);
 
   return (
     <div className="mt-24 flex-1 overflow-hidden">
@@ -110,7 +113,7 @@ const Container = ({ children, showItems = false }: Props) => {
           </nav>
 
           {projectItems && !showItems ? (
-            <CreateProject show={false} />
+            <CreateProject show={false} setIsUpdated={setIsUpdated} />
           ) : (
             <Modal>
               <ModalTrigger asChild className="mb-2">
@@ -135,7 +138,7 @@ const Container = ({ children, showItems = false }: Props) => {
                   </ModalDescription>
                 </ModalHeader>
 
-                <CreateTokenForm />
+                <CreateTokenForm setIsUpdated={setIsUpdated} />
               </ModalContent>
             </Modal>
           )}

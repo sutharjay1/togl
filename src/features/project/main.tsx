@@ -30,6 +30,9 @@ export function Project() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { setProjectId } = useProject();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isUpdated, setIsUpdated] = useState(false);
+
   const {
     data: projects,
     isLoading,
@@ -114,7 +117,7 @@ export function Project() {
             <P className="mb-4 text-sm text-muted-foreground [&:not(:first-child)]:mt-1">
               You haven&apos;t created any projects yet
             </P>
-            <CreateProject />
+            <CreateProject setIsUpdated={setIsUpdated} />
           </div>
         </CardContent>
       </Card>
