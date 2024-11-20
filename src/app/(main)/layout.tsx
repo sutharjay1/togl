@@ -30,7 +30,7 @@ export default function DashboardLayout({
         />
         <main
           className={cn(
-            "relative z-10 min-h-screen w-full bg-background",
+            "relative z-10 min-h-screen w-full",
             geistSans.className,
           )}
         >

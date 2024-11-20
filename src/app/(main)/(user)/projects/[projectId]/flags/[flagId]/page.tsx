@@ -85,7 +85,7 @@ export default function TokenPage({ params }: Props) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col space-y-4 bg-background">
+    <div className="flex flex-col space-y-4">
       <div>
         <Breadcrumb>
           <BreadcrumbList>

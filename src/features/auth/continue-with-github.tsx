@@ -1,15 +1,31 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/useUser";
 
 import { TRPCClientError } from "@trpc/client";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { GrGithub } from "react-icons/gr";
 import { toast } from "sonner";
+import { useProject } from "../project/hooks/useProject";
 
 const ContinueWithGithub = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const router = useRouter();
+
+  const { user } = useUser();
+  const { setProjectId } = useProject();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+
+      setProjectId(user.projectId);
+    }
+  }, [user, router]);
 
   const handleGithubLogin = async () => {
     try {
