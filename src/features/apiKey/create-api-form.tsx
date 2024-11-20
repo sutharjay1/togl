@@ -25,14 +25,16 @@ import { TRPCClientError } from "@trpc/client";
 import { useRouter } from "next/navigation";
 import { generateSlug } from "random-word-slugs";
 import { toast } from "sonner";
+import { useProject } from "../project/hooks/useProject";
 
 const APIKeySchema = z.object({
   name: z.string().min(1, "API Key name is required"),
-  projectId: z.array(z.object({ id: z.string(), name: z.string() })),
+  projectId: z.string(),
 });
 
 const CreateAPIKeyForm = () => {
   const router = useRouter();
+  const { projectId } = useProject();
 
   const { data: projects, isLoading: isLoadingProjects } =
     trpc.project.getProjects.useQuery();
@@ -58,17 +60,19 @@ const CreateAPIKeyForm = () => {
       },
     });
 
+  const filteredProject = projects?.filter(
+    (project) => project.id === projectId,
+  )[0];
+  const projectIdAndName = filteredProject
+    ? { id: filteredProject.id, name: filteredProject.name }
+    : null;
+
   const form = useForm<z.infer<typeof APIKeySchema>>({
     mode: "onChange",
     resolver: zodResolver(APIKeySchema),
     defaultValues: {
       name: generateSlug(2),
-      projectId: projects?.map((project) => {
-        return {
-          id: project.id,
-          name: project.name,
-        };
-      }),
+      projectId: projectIdAndName?.id,
     },
   });
 
@@ -76,7 +80,7 @@ const CreateAPIKeyForm = () => {
     try {
       await createAPIKey({
         name: values.name,
-        projectId: values.projectId[0].id,
+        projectId: values.projectId,
       });
     } catch (error) {
       if (error instanceof TRPCClientError) {
@@ -140,8 +144,7 @@ const CreateAPIKeyForm = () => {
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={projects?.[0]?.id}
-                  disabled={pending}
+                  defaultValue={field.value}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a project" />

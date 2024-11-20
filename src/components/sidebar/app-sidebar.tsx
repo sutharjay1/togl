@@ -47,7 +47,13 @@ export function AppSidebar() {
         },
         {
           title: "Team",
-          url: "/team/general",
+          url: `/projects/${projectId}/team`,
+          icon: Users,
+          match: (path: string) => path.startsWith("/team"),
+        },
+        {
+          title: "Settings",
+          url: `/projects/${projectId}/settings/general`,
           icon: Users,
           match: (path: string) => path.startsWith("/team"),
         },

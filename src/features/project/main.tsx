@@ -30,8 +30,8 @@ export function Project() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { setProjectId } = useProject();
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isUpdated, setIsUpdated] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const {
     data: projects,

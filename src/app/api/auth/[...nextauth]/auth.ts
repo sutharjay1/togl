@@ -15,11 +15,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
-      console.log({
-        session,
-        token,
-      });
+    async session({ session }) {
       if (session.user?.email) {
         const dbUser = await db.user.findUnique({
           where: { email: session.user.email },
@@ -31,23 +27,13 @@ export const authOptions: AuthOptions = {
         if (dbUser && session.user) {
           session.user.id = dbUser.id;
 
-          console.log({
-            dbUser,
-          });
-
           session.user.projectId = dbUser.projects[0]?.id;
         }
       }
       return session;
     },
-    async signIn({ user, account, profile }) {
+    async signIn({ user }) {
       if (!user.email) return false;
-
-      console.log({
-        user,
-        account,
-        profile,
-      });
 
       try {
         const dbUser = await db.user.findUnique({

@@ -149,10 +149,6 @@ export const tokenRouter = router({
           });
         }
 
-        console.log({
-          result,
-        });
-
         return result;
       } catch (error) {
         if (error instanceof TRPCError) {
