@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🎨 Togl UI</h1>
+  <h1>Togl</h1>
   <p><strong>Modern UI for Enterprise-Grade Feature Management</strong></p>
   <p>
     <a href="#features">Features</a> •
