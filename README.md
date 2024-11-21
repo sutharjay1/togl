@@ -14,7 +14,7 @@
 
 ## Overview
 
-Togl UI is the frontend interface for the Togl feature management system. Built with Next.js and React, it provides a sleek, responsive, and user-friendly dashboard for managing feature flags, user roles, and organizational settings.
+Togl is a feature management system. Built with Next.js and React, it provides a sleek, responsive, and user-friendly dashboard for managing feature flags, user roles, and organizational settings.
 
 ## Features
 
