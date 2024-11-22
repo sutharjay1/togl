@@ -25,7 +25,6 @@ const Logo = ({ text }: Props) => {
           "relative flex h-8 w-fit items-center justify-center rounded-md",
         )}
       >
-        <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>
         <Image
           src={
             theme === "light"
@@ -37,6 +36,7 @@ const Logo = ({ text }: Props) => {
           width={25}
           height={25}
         />
+        <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>
       </div>
     </Link>
   );
