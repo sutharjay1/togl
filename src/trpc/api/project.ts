@@ -151,6 +151,53 @@ export const projectRouter = router({
       }
     }),
 
+  getProjectMembers: privateProcedure
+    .input(getProjectByIdSchema)
+    .query(async ({ input, ctx }) => {
+      const { projectId } = input;
+
+      try {
+        const userId = ctx.session?.user.id;
+
+        if (!userId) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in",
+          });
+        }
+
+        const project = await db.project.findFirst({
+          where: {
+            id: projectId,
+            users: { some: { id: userId } },
+          },
+          select: {
+            users: true,
+          },
+        });
+
+        if (!project) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Project not found",
+          });
+        }
+
+        return project.users;
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "An error occurred while fetching project members.",
+        });
+      }
+    }),
+
   updateProject: privateProcedure
     .input(updateProjectSchema)
     .mutation(async ({ input, ctx }) => {
