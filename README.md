@@ -93,36 +93,30 @@ npm run dev
 ### Feature Flag Management
 
 ```jsx
-import { FeatureToggle } from "@/components/features/FeatureToggle";
+import { useEffect, useState } from 'react'
 
-<FeatureToggle
-  id="new-user-onboarding"
-  name="New User Onboarding"
-  description="Enable the new user onboarding flow"
-  isActive={true}
-  onToggle={handleToggle}
-/>;
+function MyFeature() {
+  const [isEnabled, setIsEnabled] = useState(false)
+
+  useEffect(() => {
+    const checkFeatureFlag = async () => {
+      const response = await fetch('https://togl.sutharjay3635.workers.dev/api/token/<TOKEN_ID>', {
+        headers: {
+          'Authorization': 'Bearer <API_KEY>', 
+        }
+      })
+      const data = await response.json()
+      setIsEnabled(data.enabled)
+    }
+
+    checkFeatureFlag()
+  }, [])
+
+  return isEnabled ? <NewFeature /> : <OldFeature />
+}
 ```
-
-### User Management
-
-```jsx
-import { UserList } from "@/components/features/UserList";
-
-<UserList users={users} onInvite={handleInvite} onRemove={handleRemove} />;
-```
-
-### Analytics Dashboard
-
-```jsx
-import { AnalyticsDashboard } from "@/components/features/AnalyticsDashboard";
-
-<AnalyticsDashboard
-  data={analyticsData}
-  timeRange="last7days"
-  onTimeRangeChange={handleTimeRangeChange}
-/>;
-```
+ 
+ 
 
 ## Configuration
 
