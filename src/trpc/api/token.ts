@@ -13,12 +13,10 @@ export const createTokenSchema = z.object({
 
 export const getTokenSchema = z.object({
   projectId: z.string(),
-  workspaceId: z.string(),
 });
 
 export const getTokenByIdSchema = z.object({
   tokenId: z.string(),
-  workspaceId: z.string(),
 });
 
 export const updateTokenSchema = z.object({
@@ -30,7 +28,6 @@ export const updateTokenSchema = z.object({
 
 export const deleteTokenSchema = z.object({
   tokenId: z.string(),
-  workspaceId: z.string(),
 });
 
 export const tokenRouter = router({
@@ -60,7 +57,6 @@ export const tokenRouter = router({
           include: {
             Project: {
               include: {
-                workspace: true,
                 apiKeys: true,
                 token: true,
                 _count: true,
@@ -86,7 +82,7 @@ export const tokenRouter = router({
   getTokens: privateProcedure
     .input(getTokenSchema)
     .query(async ({ input, ctx }) => {
-      const { projectId, workspaceId } = input;
+      const { projectId } = input;
       const { session } = ctx;
 
       try {
@@ -98,7 +94,6 @@ export const tokenRouter = router({
           });
         }
 
-        await verifyUserWorkspaceAccess(userId, workspaceId);
         const result = await db.token.findMany({
           where: {
             projectId,
@@ -131,7 +126,7 @@ export const tokenRouter = router({
   getTokenById: privateProcedure
     .input(getTokenByIdSchema)
     .query(async ({ input, ctx }) => {
-      const { tokenId, workspaceId } = input;
+      const { tokenId } = input;
       const { session } = ctx;
 
       try {
@@ -143,7 +138,6 @@ export const tokenRouter = router({
           });
         }
 
-        await verifyUserWorkspaceAccess(userId, workspaceId);
         const result = await db.token.findUnique({
           where: { id: tokenId },
         });
@@ -196,8 +190,6 @@ export const tokenRouter = router({
           });
         }
 
-        await verifyUserWorkspaceAccess(userId, project.workspaceId);
-
         const featureState = await db.token.findUnique({
           where: { id: tokenId },
         });
@@ -235,7 +227,7 @@ export const tokenRouter = router({
   deleteToken: privateProcedure
     .input(deleteTokenSchema)
     .mutation(async ({ input, ctx }) => {
-      const { tokenId, workspaceId } = input;
+      const { tokenId } = input;
       const { session } = ctx;
 
       try {
@@ -246,8 +238,6 @@ export const tokenRouter = router({
             message: "User must be logged in",
           });
         }
-
-        await verifyUserWorkspaceAccess(userId, workspaceId);
 
         const featureState = await db.token.findUnique({
           where: { id: tokenId },
@@ -326,28 +316,3 @@ export const tokenRouter = router({
       }
     }),
 });
-
-async function verifyUserWorkspaceAccess(userId: string, workspaceId: string) {
-  if (!workspaceId) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Workspace ID is missing",
-    });
-  }
-
-  const userWorkspace = await db.userWorkspace.findUnique({
-    where: {
-      userId_workspaceId: {
-        userId,
-        workspaceId,
-      },
-    },
-  });
-
-  if (!userWorkspace) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "User does not have access to this workspace",
-    });
-  }
-}

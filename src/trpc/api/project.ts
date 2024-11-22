@@ -3,44 +3,34 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
 
-const createProjectSchema = z.object({
+export const createProjectSchema = z.object({
   name: z.string().min(1, "Project name is required"),
-
   description: z.string().optional(),
-  workspaceId: z.string(),
-});
-
-const getProjectsSchema = z.object({
-  workspaceId: z.string(),
 });
 
 const getProjectByIdSchema = z.object({
-  workspaceId: z.string(),
   projectId: z.string(),
 });
 
 export const updateProjectSchema = z.object({
-  workspaceId: z.string(),
   projectId: z.string(),
   name: z.string().optional(),
   description: z.string().optional(),
 });
 
 const deleteProjectSchema = z.object({
-  workspaceId: z.string(),
   projectId: z.string(),
 });
 
 const checkProjectNameExistsSchema = z.object({
   name: z.string(),
-  workspaceId: z.string(),
 });
 
 export const projectRouter = router({
   create: privateProcedure
     .input(createProjectSchema)
     .mutation(async ({ input, ctx }) => {
-      const { name, description, workspaceId } = input;
+      const { name, description } = input;
 
       const { session } = ctx;
       try {
@@ -52,29 +42,16 @@ export const projectRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserWorkspaceAccess(userId!, workspaceId);
-
-        const projectExists = await db.project.findUnique({
-          where: {
-            workspaceId_name: {
-              name,
-              workspaceId,
-            },
-          },
-        });
-
-        if (projectExists) {
-          throw new TRPCError({
-            code: "CONFLICT",
-            message: "Project already exists in this workspace",
-          });
-        }
 
         const project = await db.project.create({
           data: {
             name,
             description,
-            workspaceId,
+            users: {
+              connect: {
+                id: userId,
+              },
+            },
           },
         });
 
@@ -93,45 +70,47 @@ export const projectRouter = router({
       }
     }),
 
-  getProjects: privateProcedure
-    .input(getProjectsSchema)
-    .query(async ({ input, ctx }) => {
-      const { workspaceId } = input;
-      const { session } = ctx;
+  getProjects: privateProcedure.query(async ({ ctx }) => {
+    const { session } = ctx;
 
-      try {
-        const userId = session?.user.id;
-        if (!userId) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "User must be logged in",
-          });
-        }
-        await verifyUserWorkspaceAccess(userId!, workspaceId);
-
-        const projects = await db.project.findMany({
-          where: { workspaceId },
-        });
-
-        return projects;
-      } catch (error) {
-        if (error instanceof TRPCError) {
-          throw error;
-        }
+    try {
+      const userId = session?.user.id;
+      if (!userId) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message:
-            error instanceof Error
-              ? error.message
-              : "An error occurred while fetching projects.",
+          code: "UNAUTHORIZED",
+          message: "User must be logged in",
         });
       }
-    }),
+
+      const projects = await db.project.findMany({
+        where: {
+          users: { some: { id: userId } },
+        },
+        include: {
+          token: true,
+          users: true,
+        },
+      });
+
+      return projects;
+    } catch (error) {
+      if (error instanceof TRPCError) {
+        throw error;
+      }
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while fetching projects.",
+      });
+    }
+  }),
 
   getProjectById: privateProcedure
     .input(getProjectByIdSchema)
     .query(async ({ input, ctx }) => {
-      const { workspaceId, projectId } = input;
+      const { projectId } = input;
 
       const { session } = ctx;
 
@@ -143,12 +122,11 @@ export const projectRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserWorkspaceAccess(userId, workspaceId);
 
         const project = await db.project.findFirst({
           where: {
             id: projectId,
-            workspaceId,
+            users: { some: { id: userId } },
           },
         });
 
@@ -173,10 +151,57 @@ export const projectRouter = router({
       }
     }),
 
+  getProjectMembers: privateProcedure
+    .input(getProjectByIdSchema)
+    .query(async ({ input, ctx }) => {
+      const { projectId } = input;
+
+      try {
+        const userId = ctx.session?.user.id;
+
+        if (!userId) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in",
+          });
+        }
+
+        const project = await db.project.findFirst({
+          where: {
+            id: projectId,
+            users: { some: { id: userId } },
+          },
+          select: {
+            users: true,
+          },
+        });
+
+        if (!project) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Project not found",
+          });
+        }
+
+        return project.users;
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "An error occurred while fetching project members.",
+        });
+      }
+    }),
+
   updateProject: privateProcedure
     .input(updateProjectSchema)
     .mutation(async ({ input, ctx }) => {
-      const { workspaceId, projectId, name, description } = input;
+      const { projectId, name, description } = input;
 
       const { session } = ctx;
       try {
@@ -187,12 +212,11 @@ export const projectRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserWorkspaceAccess(userId, workspaceId);
 
         const project = await db.project.update({
           where: {
             id: projectId,
-            workspaceId,
+            users: { some: { id: userId } },
           },
           data: {
             name,
@@ -218,7 +242,7 @@ export const projectRouter = router({
   deleteProject: privateProcedure
     .input(deleteProjectSchema)
     .mutation(async ({ input, ctx }) => {
-      const { workspaceId, projectId } = input;
+      const { projectId } = input;
 
       const { session } = ctx;
 
@@ -230,12 +254,11 @@ export const projectRouter = router({
             message: "User must be logged in",
           });
         }
-        await verifyUserWorkspaceAccess(userId, workspaceId);
 
         await db.project.delete({
           where: {
             id: projectId,
-            workspaceId,
+            users: { some: { id: userId } },
           },
         });
 
@@ -256,14 +279,16 @@ export const projectRouter = router({
 
   checkProjectNameExists: privateProcedure
     .input(checkProjectNameExistsSchema)
-    .query(async ({ input }) => {
-      const { name, workspaceId } = input;
+    .query(async ({ input, ctx }) => {
+      const { name } = input;
 
+      const { session } = ctx;
+      const id = session?.user.id;
       try {
         const project = await db.project.findFirst({
           where: {
             name,
-            workspaceId,
+            users: { some: { id } },
           },
         });
 
@@ -282,23 +307,3 @@ export const projectRouter = router({
       }
     }),
 });
-
-async function verifyUserWorkspaceAccess(userId: string, workspaceId: string) {
-  const userWorkspace = await db.userWorkspace.findUnique({
-    where: {
-      userId_workspaceId: {
-        userId,
-        workspaceId,
-      },
-    },
-  });
-
-  if (!userWorkspace) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "User does not have access to this workspace",
-    });
-  }
-
-  return userWorkspace;
-}

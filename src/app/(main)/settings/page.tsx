@@ -1,9 +1,7 @@
 import { H1, P } from "@/components/ui/typography";
-import { geistSans } from "@/lib/fonts";
+import { geistSans } from "@/features/font";
 import { cn } from "@/lib/utils";
 import NextTopLoader from "nextjs-toploader";
-import React from "react";
-import Header from "../_components/header";
 
 const Settings = () => {
   return (
@@ -34,8 +32,6 @@ const Settings = () => {
         </div>
 
         <section className={cn("relative flex h-full flex-1 flex-col")}>
-          <Header />
-
           <div className="mt-24 flex-1 overflow-hidden">
             <div className="mx-auto max-w-5xl px-4">
               <div className="flex items-center justify-between border-b">

@@ -1,3 +1,87 @@
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model User {
+//   id           String          @id @default(cuid())
+//   name         String
+//   email        String          @unique
+//   googleId     String?         @unique
+//   refreshToken String?
+//   avatar       String?
+//   workspace    UserWorkspace[]
+//   createdAt    DateTime        @default(now())
+//   updatedAt    DateTime        @updatedAt
+// }
+
+// model Workspace {
+//   id        String          @id @default(cuid())
+//   name      String
+//   projects  Project[]
+//   members   UserWorkspace[]
+//   createdAt DateTime        @default(now())
+//   updatedAt DateTime        @updatedAt
+// }
+
+// model UserWorkspace {
+//   id          String    @id @default(cuid())
+//   userId      String
+//   workspaceId String
+//   role        String    @default("MEMBER")
+//   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+
+//   @@unique([userId, workspaceId])
+//   @@index([userId])
+//   @@index([workspaceId])
+// }
+
+// model Project {
+//   id          String    @id @default(cuid())
+//   name        String
+//   description String?
+//   workspaceId String
+//   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+//   token       Token[]
+//   apiKeys     ApiKey[]
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+
+//   @@unique([workspaceId, name])
+// }
+
+// model Token {
+//   id          String   @id @default(cuid())
+//   name        String
+//   description String?
+//   isEnabled   Boolean  @default(false)
+//   rules       Json?
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   Project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+//   projectId   String?
+// }
+
+// model ApiKey {
+//   id        String    @id @default(cuid())
+//   key       String    @unique
+//   name      String
+//   projectId String
+//   project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   expiresAt DateTime?
+
+//   @@index([expiresAt])
+// }
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,53 +92,28 @@ datasource db {
 }
 
 model User {
-  id           String          @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String
-  email        String          @unique
-  googleId     String?         @unique
+  email        String    @unique
+  googleId     String?   @unique
   refreshToken String?
   avatar       String?
-  workspace    UserWorkspace[]
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-}
-
-model Workspace {
-  id        String          @id @default(cuid())
-  name      String
-  projects  Project[]
-  members   UserWorkspace[]
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-}
-
-model UserWorkspace {
-  id          String    @id @default(cuid())
-  userId      String
-  workspaceId String
-  role        String    @default("MEMBER")
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@unique([userId, workspaceId])
-  @@index([userId])
-  @@index([workspaceId])
+  projects     Project[] @relation("UserProjects")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Project {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  users       User[]   @relation("UserProjects")
   token       Token[]
   apiKeys     ApiKey[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@unique([workspaceId, name])
+  @@unique([name])
 }
 
 model Token {
