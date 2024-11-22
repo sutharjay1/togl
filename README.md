@@ -115,6 +115,16 @@ function MyFeature() {
   return isEnabled ? <NewFeature /> : <OldFeature />
 }
 ```
+
+#### Response
+The API returns the following structure:
+```json
+{
+  "name": string,
+  "isEnabled": boolean,
+  "rules": json
+}
+```
  
  
 
