@@ -9,9 +9,10 @@ import Link from "next/link";
 
 type Props = {
   text?: string;
+  show?: boolean;
 };
 
-const Logo = ({ text }: Props) => {
+const Logo = ({ text, show = true }: Props) => {
   const { user } = useUser();
 
   const { theme } = useTheme();
@@ -22,10 +23,10 @@ const Logo = ({ text }: Props) => {
     >
       <div
         className={cn(
-          "relative flex h-8 w-fit items-center justify-center rounded-md",
+          "relative flex h-8 w-fit items-center justify-center rounded-md px-2",
+          !show && "pb-12",
         )}
       >
-        <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>
         <Image
           src={
             theme === "light"
@@ -34,9 +35,12 @@ const Logo = ({ text }: Props) => {
           }
           alt="logo"
           className={cn("mx-auto")}
-          width={25}
-          height={25}
+          width={show ? 25 : 75}
+          height={show ? 25 : 75}
         />
+        {show ? (
+          <span className={cn("px-2 text-lg font-bold", text)}>Togl</span>
+        ) : null}
       </div>
     </Link>
   );

@@ -40,7 +40,7 @@ const SignIn = () => {
       <div className="flex h-screen flex-col items-center justify-center bg-black">
         <div className="w-full max-w-[400px] space-y-8 px-4">
           <div className="flex flex-col items-center space-y-4">
-            <Logo text="text-4xl sm:text-5xl lg:text-5xl" />
+            <Logo text="text-4xl sm:text-5xl lg:text-5xl" show={false} />
             <H1 className="mb-6 font-inter text-xl font-semibold tracking-tight sm:text-2xl lg:text-2xl">
               Login to Platform
             </H1>
