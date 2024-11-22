@@ -12,8 +12,12 @@ import { cn } from "@/lib/utils";
 import { LogOut, Monitor, Moon, Plus, Settings, Sun } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { P } from "../ui/typography";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar";
+import { P } from "../../components/ui/typography";
 import Hint from "./hint";
 import { useTheme } from "next-themes";
 

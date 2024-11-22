@@ -23,7 +23,7 @@ const ContinueWithGoogle = () => {
 
       setProjectId(user.projectId);
     }
-  }, [user, router]);
+  }, [user, router, setProjectId]);
 
   const handleGoogleLogin = async () => {
     try {

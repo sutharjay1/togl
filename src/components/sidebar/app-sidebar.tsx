@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/sidebar";
 import { useProject } from "@/features/project/hooks/useProject";
 import { ProjectDropDown } from "@/features/project/project-dropdown";
-import { FlagIcon, Home, Settings, Users } from "lucide-react";
+import { FlagIcon, Home, Users } from "lucide-react";
 import Link from "next/link";
-import UserDropdownMenu from "../global/user-avatar";
+import UserDropdownMenu from "../../features/_global/user-avatar";
 
 export function AppSidebar() {
   const { projectId } = useProject();
@@ -59,38 +59,25 @@ export function AppSidebar() {
         },
       ],
     },
-    {
-      title: "Release",
-      url: "#",
-      isActive: true,
-      items: [
-        {
-          title: "Settings",
-          url: "/settings/general",
-          icon: Settings,
-          match: (path: string) => path.startsWith("/settings"),
-        },
-      ],
-    },
   ];
 
   return (
     <Sidebar className="border-r">
       <SidebarContent>
         <ProjectDropDown />
-        <div className="px-3 py-2">
+        <div className="px-2 py-2">
           <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="font-medium">
+                    <Link href={item.url} className="font-medium">
                       {item.title}
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                   {item.items?.length ? (
-                    <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
+                    <SidebarMenuSub className="ml-2 border-l-0 px-1.5">
                       {item.items.map((item) => (
                         <SidebarMenuSubItem key={item.title}>
                           <SidebarMenuSubButton asChild>

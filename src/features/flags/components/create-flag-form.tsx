@@ -82,7 +82,7 @@ const CreateTokenForm = ({
   });
 
   const filteredProject = projects?.filter(
-    (project) => project.id === projectId,
+    (project: any) => project.id === projectId,
   )[0];
   const projectIdAndName = filteredProject
     ? { id: filteredProject.id, name: filteredProject.name }
@@ -116,7 +116,7 @@ const CreateTokenForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Token Name</FormLabel>
+              <FormLabel>Flag Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter token name" {...field} />
               </FormControl>
@@ -210,7 +210,7 @@ const CreateTokenForm = ({
         />
         <Button type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Create Token
+          Create Flag
         </Button>
       </form>
     </Form>

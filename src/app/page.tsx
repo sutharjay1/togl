@@ -1,4 +1,4 @@
-import NavBar from "@/components/global/nav-bar";
+import NavBar from "@/features/_global/nav-bar";
 import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";
 import { geistSans } from "@/features/font";

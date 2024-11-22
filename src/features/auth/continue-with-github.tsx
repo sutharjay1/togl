@@ -25,7 +25,7 @@ const ContinueWithGithub = () => {
 
       setProjectId(user.projectId);
     }
-  }, [user, router]);
+  }, [user, router, setProjectId]);
 
   const handleGithubLogin = async () => {
     try {
