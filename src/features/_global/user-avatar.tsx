@@ -7,10 +7,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@/hooks/useUser";
-
 import { cn } from "@/lib/utils";
-import { LogOut, Monitor, Moon, Plus, Settings, Sun } from "lucide-react";
+import { LogOut, Monitor } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import {
   Avatar,
@@ -19,7 +19,6 @@ import {
 } from "../../components/ui/avatar";
 import { P } from "../../components/ui/typography";
 import Hint from "./hint";
-import { useTheme } from "next-themes";
 
 const UserDropdownMenu = ({
   className,
