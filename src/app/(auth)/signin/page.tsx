@@ -1,4 +1,4 @@
-import Logo from "@/components/global/logo";
+import Logo from "@/features/_global/logo";
 
 import { Button } from "@/components/ui/button";
 import { H1, P } from "@/components/ui/typography";

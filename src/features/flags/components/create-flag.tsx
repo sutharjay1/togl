@@ -23,20 +23,20 @@ const CreateFlag = ({
       <ModalTrigger asChild>
         {show ? (
           <Button variant="shine" className="h-9 py-1">
-            <Plus className="mr-2 h-4 w-4" /> New Token
+            <Plus className="mr-2 h-4 w-4" /> New Flag
           </Button>
         ) : (
           <Button variant="shine" className="h-9 py-1">
             <Plus className="mr-0 h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">New Token</span>
+            <span className="hidden sm:inline">New Flag</span>
           </Button>
         )}
       </ModalTrigger>
       <ModalContent>
         <ModalHeader>
-          <ModalTitle className="text-left">Create new token</ModalTitle>
+          <ModalTitle className="text-left">Create new flag</ModalTitle>
           <ModalDescription className="text-left">
-            Create a new token to get started
+            Create a new flag to get started
           </ModalDescription>
         </ModalHeader>
 

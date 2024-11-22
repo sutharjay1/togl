@@ -1,4 +1,4 @@
-import CreateProjectForm from "@/components/form/create-project";
+import CreateProjectForm from "@/features/project/create-project-form";
 import { Button } from "@/components/ui/button";
 import {
   Modal,

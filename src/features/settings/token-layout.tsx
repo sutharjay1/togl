@@ -49,7 +49,7 @@ const TokenLayout = ({ children }: TokenLayoutProps) => {
                 return (
                   <Link
                     key={token.id}
-                    href={`/projects/${projectId}/tokens/${token.id}`}
+                    href={`/projects/${projectId}/flags/${token.id}`}
                     className="block"
                   >
                     <Card className=" ">
