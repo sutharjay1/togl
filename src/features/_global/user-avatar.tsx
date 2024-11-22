@@ -10,7 +10,6 @@ import { useUser } from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
 import { LogOut, Monitor } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import {
   Avatar,
@@ -28,7 +27,7 @@ const UserDropdownMenu = ({
   variant?: "gooeyRight" | "gooeyLeft";
 }) => {
   const { user } = useUser();
-  const { setTheme } = useTheme();
+
   const handleLogout = () => {
     signOut({
       callbackUrl: "/",
