@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🎨 Togl UI</h1>
+  <h1>Togl</h1>
   <p><strong>Modern UI for Enterprise-Grade Feature Management</strong></p>
   <p>
     <a href="#features">Features</a> •
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Togl UI is the frontend interface for the Togl feature management system. Built with Next.js and React, it provides a sleek, responsive, and user-friendly dashboard for managing feature flags, user roles, and organizational settings.
+Togl is a feature management system. Built with Next.js and React, it provides a sleek, responsive, and user-friendly dashboard for managing feature flags, user roles, and organizational settings.
 
 ## Features
 
@@ -93,36 +93,40 @@ npm run dev
 ### Feature Flag Management
 
 ```jsx
-import { FeatureToggle } from "@/components/features/FeatureToggle";
+import { useEffect, useState } from 'react'
 
-<FeatureToggle
-  id="new-user-onboarding"
-  name="New User Onboarding"
-  description="Enable the new user onboarding flow"
-  isActive={true}
-  onToggle={handleToggle}
-/>;
+function MyFeature() {
+  const [isEnabled, setIsEnabled] = useState(false)
+
+  useEffect(() => {
+    const checkFeatureFlag = async () => {
+      const response = await fetch('https://togl.sutharjay3635.workers.dev/api/token/<TOKEN_ID>', {
+        headers: {
+          'Authorization': 'Bearer <API_KEY>', 
+        }
+      })
+      const data = await response.json()
+      setIsEnabled(data.enabled)
+    }
+
+    checkFeatureFlag()
+  }, [])
+
+  return isEnabled ? <NewFeature /> : <OldFeature />
+}
 ```
 
-### User Management
-
-```jsx
-import { UserList } from "@/components/features/UserList";
-
-<UserList users={users} onInvite={handleInvite} onRemove={handleRemove} />;
+#### Response
+The API returns the following structure:
+```json
+{
+  "name": string,
+  "isEnabled": boolean,
+  "rules": json
+}
 ```
-
-### Analytics Dashboard
-
-```jsx
-import { AnalyticsDashboard } from "@/components/features/AnalyticsDashboard";
-
-<AnalyticsDashboard
-  data={analyticsData}
-  timeRange="last7days"
-  onTimeRangeChange={handleTimeRangeChange}
-/>;
-```
+ 
+ 
 
 ## Configuration
 
