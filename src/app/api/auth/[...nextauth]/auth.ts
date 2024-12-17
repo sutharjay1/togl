@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
       if (!user.email) return false;
 
       try {
-        const dbUser = await db.user.findUnique({
+        const dbUser = await db.user.findFirst({
           where: { email: user.email },
         });
 
